@@ -1,0 +1,80 @@
+.Landing {
+    position: relative;
+    min-height: 100vh;
+    min-width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #BEE3DB;
+}
+
+.titleText {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    font-size: 40px;
+    top: 50%;
+    transform: translate(0, -50%);
+    animation: fly-up 1s ease-in 2s 1;
+    animation-fill-mode: forwards; 
+}
+
+.titleText > h1 {
+    margin: 0;
+}
+
+.subTitle {
+    font-size: 0.8em;
+}
+
+.scan {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    bottom: -50%;
+    transform: translate(0, 50%);
+    animation: fly-up-bottom 1s ease-out 2.5s 1;
+    animation-fill-mode: forwards;
+}
+
+.waitMessage {
+    font-size: 24px;
+    margin: 1em;
+}
+
+.camera {
+    height: 500px;
+    width: 800px;
+    border: 1px solid red;
+    border-radius: 25px;
+}
+
+@keyframes fly-up {
+    from {
+        top: 50%;
+        opacity: 1;
+    }
+
+    to {
+        top: -50%;
+        opacity: 0;
+    }
+}
+
+@keyframes fly-up-bottom {
+    from {
+        bottom: -50%;
+        opacity: 0;
+    }
+
+    to {
+        bottom: 50%;
+        opacity: 1;
+    }
+}

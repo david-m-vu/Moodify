@@ -3,7 +3,7 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom"
 import Landing from "./scenes/Landing/Landing.jsx";
 import Main from "./scenes/Main/Main.jsx";
 
-function App() {
+function App() {  
   return (
     <div className="App">
       <BrowserRouter>
