@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, redirect
+from flask import Flask, render_template, Response, redirect, request
 import cv2 as cv
 import json
 from hume import HumeBatchClient
@@ -28,10 +28,35 @@ cloudinary.config(
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/', methods=["GET", "POST"])
 def index():
-    emotions = top_5
-    return render_template('index.html', top_5=top_5)
+    if request.method == "GET":
+        gen_frames()
+        return render_template('index.html', top_5={})
+    elif request.method == "POST":
+        emotion = getEmotion()
+
+        with open("predictions.json", "r") as read_file:
+                data = json.load(read_file)
+
+        data = data[0]['results']['predictions'][0]['models']['face']['grouped_predictions'][0]['predictions'][0]['emotions']
+        data = sorted(data, key=lambda x : x['score'], reverse=True)
+        print(data)
+        
+        top_5 = {}
+        i = 0
+        while (i < 5):
+            top_5[data[i]['name']] = data[i]['score']
+            i += 1
+
+        print(top_5)
+
+        top_5_emotions = []
+        for i in top_5:
+            top_5_emotions.append(i)
+            
+        print(top_5_emotions)
+        return render_template('index.html', top_5=top_5)
 
 def gen_frames():
     top_5 = {}
@@ -44,32 +69,8 @@ def gen_frames():
             ret, buffer = cv.imencode('.jpg', frame)            
             frame = buffer.tobytes()
 
-            emotion = getEmotion()
-
-            with open("predictions.json", "r") as read_file:
-                data = json.load(read_file)
-
-            data = data[0]['results']['predictions'][0]['models']['face']['grouped_predictions'][0]['predictions'][0]['emotions']
-            data = sorted(data, key=lambda x : x['score'], reverse=True)
-            print(data)
-            
-            i = 0
-            while (i < 5):
-                top_5[data[i]['name']] = data[i]['score']
-                i += 1
-
-            print(top_5)
-
-            top_5_emotions = []
-            for i in top_5:
-                top_5_emotions.append(i)
-            
-            print(top_5_emotions)
-
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-            
-        boolean = False
     
 
 @app.route('/video_feed')
