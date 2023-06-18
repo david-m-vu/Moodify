@@ -16,7 +16,22 @@ const tempEmotions = {
 };
 
 const parseLyrics = (lyrics) => {
-    let parsedLyrics = lyrics.split("\n");
+    let newlineParsedLyrics = lyrics.split("\n");
+    let parsedLyrics = [];
+
+    for (let i = 0; i < newlineParsedLyrics.length; i++) {
+        
+        if (newlineParsedLyrics[i] !== '') {
+            if (newlineParsedLyrics[i][0] === "[" && newlineParsedLyrics[i][newlineParsedLyrics[i].length - 1] === "]") {
+                parsedLyrics.push("-")
+            }
+            parsedLyrics.push(newlineParsedLyrics[i]);
+        } 
+
+        if (parsedLyrics[0] === '-') {
+            parsedLyrics = parsedLyrics.slice(1, parsedLyrics.length);
+        }
+    }
     return parsedLyrics;
 }
 
@@ -24,7 +39,9 @@ const Main = () => {
   const [input, setInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [currentSong, setCurrentSong] = useState(null);
-  const [lyrics, setLyrics] = useState([]);
+  const [verses, setVerses] = useState([]);
+  const [selectedVerse, setSelectedVerse] = useState([]);
+
 
   const navigate = useNavigate();
 
@@ -44,9 +61,28 @@ const Main = () => {
     } 
   };
 
+
+  const handleClickVerse = (verse) => {
+    setSelectedVerse(verse);
+  }
+
   const closeResults = () => {
     setSearchResults([]);
     setInput("");
+  }
+
+  const getVerses = (lyrics) => {
+    let verseArray = [];
+    let verse = [];
+    for (let i = 0; i < lyrics.length; i++) {
+        verse.push(lyrics[i])
+        if (lyrics[i] === "-") {
+            verseArray.push(verse);
+            verse = [];
+        }
+    }
+    verseArray.push(verse);
+    return verseArray;
   }
 
   const selectSong = async (song) => {
@@ -57,6 +93,16 @@ const Main = () => {
     }
     setCurrentSong(songJson);
     closeResults();
+    // setLyrics(parseLyrics(songJson.lyrics));
+    setVerses(getVerses(parseLyrics(songJson.lyrics)));
+  }
+
+  const getVerseClassName = (verse) => {
+    if (verse[0] === selectedVerse[0]) {
+        return "highlighted-verse";
+    } else {
+        return "regular-verse";
+    }
   }
 
   return (
@@ -64,9 +110,11 @@ const Main = () => {
       <div className="songInfo">
         {currentSong && <Song title={currentSong.title} artist={currentSong.artist} cover={currentSong.cover}/>}
       </div>
+
       <div className="title">
         <h1>Moodify</h1>
       </div>
+
       <div className="search">
         <div className="inputs">
           <input
@@ -82,7 +130,7 @@ const Main = () => {
               {searchResults.map((result) => {
                 return (
                   <div className="result" onClick={() => selectSong(result)}>
-                    <p>{result.title}</p>
+                    <p><span className="song-title">{result.title}</span> {` - ${result.artist}`}</p>
                   </div>
                 );
               })}
@@ -93,15 +141,32 @@ const Main = () => {
           )}
         </div>
       </div>
+
       <div className="mainSection">
         <div className="lyrics">
-          {currentSong && currentSong.lyrics}
+          {(verses.length) !== 0 && 
+            verses.map((verse) => {
+                return (
+                <div className="verse">
+                <div className={getVerseClassName(verse)} onClick={() => handleClickVerse(verse)}>
+                    {verse.map((lyric) => {
+                    if (lyric === "-") {
+                        return <br></br>
+                    }
+                    return <p className="lyric-text">{lyric}</p>  
+                    }
+                )
+                }
+                </div>
+                </div>
+
+                )
+            })
+          }
         </div>
         <div className="explanation"></div>
       </div>
-      {/* <div className="playBack">
 
-            </div> */}
       <div className="emotions">
         <div className="emotionsList">
           {Object.entries(tempEmotions).map(([emotion, score]) => {
@@ -111,6 +176,7 @@ const Main = () => {
           })}
         </div>
       </div>
+
       <div className="moodifyMe" onClick={() => goLanding()}>
         <h2>Moodify Me</h2>
       </div>

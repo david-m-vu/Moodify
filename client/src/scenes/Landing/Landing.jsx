@@ -57,7 +57,6 @@ const Landing = () => {
         </div>
         <div className={getScanClassName()}>
           <div className="waitMessage">{waitMessage}</div>
-          <div className="camera"></div>
         </div>
         {!isWaiting && (
           <div className="next">
