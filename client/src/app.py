@@ -1,4 +1,5 @@
 import asyncio
+import json
 import numpy as np 
 from flask import Flask 
 from hume import HumeStreamClient
@@ -6,7 +7,15 @@ from hume.models.config import LanguageConfig
 
 app = Flask(__name__)
 
-gpturi = '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'
+def load_config():
+    with open('./config.json', 'r') as f:
+        config = json.load(f)
+    return config
+
+config = load_config()
+
+gptKey = config["gpturi"]
+humeKey = config["hume_key"]
 
 """give me a line by line analysis of the lyrics: 
     Listen
@@ -21,23 +30,19 @@ gpturi = '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'
 samples = [
     # if you want a descriptive emotion of the entire song, use a multi line string
     """
-    Listen
-    seeing you got ritualistic
-    cleansin' my soul of addiction for now
-    Cause I'm fallin' apart
-    Yeah, tension
-    Between us just like picket fences
+    My love was as cruel as the cities I lived in
+    Everyone looked worse in the light
+    There are so many lines that I've crossed unforgiven
+    I'll tell you the truth, but never goodbye
     """
 ] # top five
 
 samples2 = [
     # if you want a line by line description of the entire song, pass lyrics in line by line seperated by a comma 
-    "Listen",
-    "Seeing you got ritualistic",
-    "Cleansin' my soul of addiction for now",
-    "Cause I'm fallin' apart",
-    "Yeah, tension",
-    "Between us just like picket fences"
+    "My love was as cruel as the cities I lived in",
+    "Everyone looked worse in the light",
+    "There are so many lines that I've crossed unforgiven",
+    "I'll tell you the truth, but never goodbye"
 ] # line by line 
 
 
@@ -81,7 +86,7 @@ async def get_top_five():
             k = test[i][0]
             top_five[k] = test[i][1]
 
-    client = HumeStreamClient("C4wQmxEcxYZ3ew3BfRGMfVValjAPmiuwsz6DMDpWnGkxVulK")
+    client = HumeStreamClient(humeKey)
     config = LanguageConfig()
     async with client.connect([config]) as socket:
         for sample in samples:
@@ -116,7 +121,7 @@ async def stringify_lines():
         
         return top_emotion_adjective
 
-    client = HumeStreamClient("C4wQmxEcxYZ3ew3BfRGMfVValjAPmiuwsz6DMDpWnGkxVulK")
+    client = HumeStreamClient(humeKey)
     config = LanguageConfig()
     async with client.connect([config]) as socket:
         for sample in samples2:
