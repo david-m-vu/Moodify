@@ -1,9 +1,9 @@
 .Song {
     display: flex;
     padding: 10px;
-    border: 1px solid white;
     border-radius: 10px;
-    background-color: #89B0AE;
+    background-color: #703D57;
+    color: #FAF9F9;
 }
 
 .Song > img {
@@ -20,5 +20,5 @@
 }
 
 .info > h3 {
-    margin-left: 10px;
+    opacity: 0.7
 }

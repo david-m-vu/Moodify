@@ -7,34 +7,107 @@
     min-height: 100%;
     min-width: 100%;
     max-height: 100vh;
-    background-color: #BEE3DB;
+    background-color: #A690A4;
     grid-template-areas:
-        "info nav nav"
+        "info title search"
         "exp exp emotions"
-        "play foot foot";
-    grid-template-rows: 120px 1fr 60px;
+        "play play foot";
+    grid-template-rows: 130px 1fr 60px;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
+    position: relative;
 }
 
 .songInfo {
     grid-area: info;
     margin: 10px;
+    opacity: 0.9;
 }
+
+.title {
+    grid-area: title;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    font-size: 40px;
+    color: white;
+}
+
+.search {
+    position: relative;
+    grid-area: search;
+    bottom: 0;
+    display: flex;
+    align-items: flex-end;
+}
+
+.inputs > input {
+    border: none;
+    outline: 0;
+    padding: 10px;
+    margin: 10px 10px 0 10px;
+    background-color: white;
+    border-radius: 10px;
+    height: 20%;    
+}
+
+.inputs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.results {
+    position: absolute;
+    top: 110%;
+    left: 10px;
+    background-color: white;
+    padding: 10px;
+    z-index: 3;
+    border-radius: 10px;
+}
+
+.close {
+    position: absolute;
+    top: 5%;
+    right: 2%;
+}
+
+.close:hover {
+    cursor: pointer;
+}
+
+.result:hover {
+    background-color: #ACCEF7;
+    cursor: pointer;
+}
+
 
 .mainSection {
     grid-area: exp;
-    background-color: #555B6E;
-    margin: 10px;
-    padding: 10px;
-    border: 1px solid white;
+    background-color: #703D57;
+    margin: 10px 0 10px 10px;
+    padding: 10px 20px 20px 20px;
     border-radius: 10px;
     overflow-y: scroll;
-    padding-top: 0;
+    box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);
+    opacity: 0.9;
+
 }
 
 .lyrics {
     color: #FAF9F9;
+    opacity: 0.9;
+    font-size: 18px;
+    max-width: 50%;
+    margin-right: 10px;
+    border-right: 2px solid black;
+}
+
+.lyrics > p {
+    margin: 0.5em;
 }
 
 ::-webkit-scrollbar {
@@ -46,8 +119,8 @@
     grid-area: play;
     background-color: #FAF9F9;
     margin: 0 10px 10px 10px;
-    border: 1px solid white;
     border-radius: 10px;
+    box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);
 }
 
 .emotions {
@@ -57,20 +130,27 @@
     align-items: center;
     text-align: center;
     margin: 10px;
-    padding: 10px;
-    border: 1px solid white;
-    background-color: #6A8D73
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #5E4B56;
+    box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);
+    color: #FAF9F9;
+    opacity: 0.9;
+
+}
+
+.emotionsList {
+    margin-top: 30%;
 }
 
 .emotionText {
     font-size: calc(var(--base-font-size) * 1px);
-    color: black;
     opacity: 1;
     margin: 0;
 }
 
 .emotionText:nth-child(1) {
-    color: #F0A868;
+    color: #A690A4;
 }
 
 .emotionText:nth-child(2) {
@@ -98,4 +178,18 @@
     opacity: 0.5.
 }
 
+.moodifyMe {
+    grid-area: foot;
+    background-color: #5E4B56;
+    margin: 0 10px 10px 10px;
+    padding: 10px;
+    border-radius: 10px;
+    color: #FAF9F9;
+    display: flex;
+    justify-content: center;
+}
 
+.moodifyMe:hover {
+    cursor: pointer;
+    border: 1px solid white;
+}

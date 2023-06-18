@@ -1,105 +1,121 @@
 import "./Main.css";
-import Song from "../../components/Song/Song.jsx"
-// import { useState } from "react";
+import Song from "../../components/Song/Song.jsx";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from '@mui/icons-material/Close';
 
-const tempLyrics = [`I'm findin' ways to articulate the feelin' I'm goin' through`,
-`I just can't say I don't love you`,
-`'Cause I love you, yeah`,
-`It's hard for me to communicate the thoughts that I hold`,
-`But tonight, I'm gon' let you know`,
-`Let me tell the truth`,
-`Baby, let me tell the truth, yeah`,
-`You know what I'm thinkin', see it in your eyes`,
-`You hate that you want me, hate it when you cry`,
-`You're scared to be lonely, 'specially in the night`,
-`I'm scared that I'll miss you, happens every time`,
-`I don't want this feelin', I can't afford love`,
-`I try to find a reason to pull us apart`,
-`It ain't workin', 'cause you're perfect, and I know that you're worth it`,
-`I can't walk away, oh`,
-`Even though we're goin' through it`,
-`And it makes you feel alone`,
-`Just know that I would die for you`,
-`Baby, I would die for you, yeah`,
-`The distance and the time between us`,
-`It'll never change my mind`,
-`'Cause baby, I would die for you`,
-`Baby, I would die for you, yeah`,
-`I'm findin' ways to manipulate the feelin' you're goin' through`,
-`But, baby girl, I'm not blamin' you`,
-`Just don't blame me, too, yeah`,
-`'Cause I can't take this pain forever`,
-`And you won't find no one that's better`,
-`'Cause I'm right for you, babe`,
-`I think I'm right for you, babe`,
-`You know what I'm thinkin', see it in your eyes`,
-`You hate that you want me, hate it when you cry`,
-`It ain't workin', 'cause you're perfect, and I know that you're worth it`,
-`I can't walk away, oh`,
-`Even though we're goin' through it`,
-`And it makes you feel alone`,
-`Just know that I would die for you`,
-`Baby, I would die for you, yeah`,
-`The distance and the time between us`,
-`It'll never change my mind`,
-`'Cause baby, I would die for you, uh`,
-`Baby, I would die for you, yeah`,
-`I would die for you, I would lie for you`,
-`Keep it real with you, I would kill for you`,
-`My baby`,
-`I'm just sayin', yeah`,
-`I would die for you, I would lie for you`,
-`Keep it real with you, I would kill for you`,
-`My baby`,
-`Na-na-na, na-na-na, na-na, ooh`,
-`Even though we're goin' through it`,
-`And it makes you feel alone`,
-`Just know that I would die for you`,
-`Baby, I would die for you, yeah`,
-`The distance and the time between us`,
-`It'll never change my mind`,
-`'Cause baby, I would die for you`,
-`Baby, I would die for you, yeah (oh, babe)`,
-]
+const baseURL = "http://127.0.0.1:5000/";
 
 const tempEmotions = {
-    "Love": 0.53,
-    "Romance": 0.42,
-    "Desire": 0.24,
-    "Adoration": 0.19,
-    "Sadness": 0.17
+  Love: 0.53,
+  Romance: 0.42,
+  Desire: 0.24,
+  Adoration: 0.19,
+  Sadness: 0.17,
+};
+
+const parseLyrics = (lyrics) => {
+    let parsedLyrics = lyrics.split("\n");
+    return parsedLyrics;
 }
 
 const Main = () => {
-    return (
-        <div className="Main">
-            <div className="songInfo">
-                <Song/>
-            </div>
-            <div className="mainSection">
-                <div className="lyrics">
-                    {tempLyrics.map((line) => {
-                        return <p>{line}</p>
-                    })}
-                </div>
-                <div className="explanation">
+  const [input, setInput] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [currentSong, setCurrentSong] = useState(null);
+  const [lyrics, setLyrics] = useState([]);
 
-                </div>
-            </div>
-            <div className="playBack">
+  const navigate = useNavigate();
 
+  const goLanding = () => {
+    navigate("../");
+  };
+
+  const handleInputChange = async (event) => {
+    setInput(event.target.value);
+    if (input !== "") {
+      let response = await fetch(`${baseURL}search/${input}`);
+      let responseJson;
+      if (response.ok) {
+        responseJson = await response.json();
+      }
+        setSearchResults(responseJson.items.slice(0, 5));
+    } 
+  };
+
+  const closeResults = () => {
+    setSearchResults([]);
+    setInput("");
+  }
+
+  const selectSong = async (song) => {
+    let songResponse = await fetch(`http://127.0.0.1:5000/song/${song.id}`);
+    let songJson;
+    if (songResponse.ok) {
+        songJson = await songResponse.json();
+    }
+    setCurrentSong(songJson);
+    closeResults();
+  }
+
+  return (
+    <div className="Main">
+      <div className="songInfo">
+        {currentSong && <Song title={currentSong.title} artist={currentSong.artist} cover={currentSong.cover}/>}
+      </div>
+      <div className="title">
+        <h1>Moodify</h1>
+      </div>
+      <div className="search">
+        <div className="inputs">
+          <input
+            list="searchResults"
+            type="text"
+            placeholder="Search for more songs"
+            value={input}
+            onChange={handleInputChange}
+          />
+          <SearchIcon fontSize="large" />
+          {(searchResults && searchResults.length !== 0) && (
+            <div className="results">
+              {searchResults.map((result) => {
+                return (
+                  <div className="result" onClick={() => selectSong(result)}>
+                    <p>{result.title}</p>
+                  </div>
+                );
+              })}
+              <div className="close" onClick={() => closeResults()}>
+                <CloseIcon fontSize="medium"/>
+              </div>
             </div>
-            <div className="emotions">
-                <h1>EMOTION CHART</h1>
-                <div className="emotionsList">
-                    {Object.entries(tempEmotions).map(([emotion, score]) => {
-                        return <p className="emotionText">{emotion + " " + score }</p>
-                    })}
-                </div>
-            </div>
-            
+          )}
         </div>
-    )
-}
+      </div>
+      <div className="mainSection">
+        <div className="lyrics">
+          {currentSong && currentSong.lyrics}
+        </div>
+        <div className="explanation"></div>
+      </div>
+      {/* <div className="playBack">
+
+            </div> */}
+      <div className="emotions">
+        <div className="emotionsList">
+          {Object.entries(tempEmotions).map(([emotion, score]) => {
+            return (
+              <p className="emotionText">{`${emotion} ${score * 100}%`}</p>
+            );
+          })}
+        </div>
+      </div>
+      <div className="moodifyMe" onClick={() => goLanding()}>
+        <h2>Moodify Me</h2>
+      </div>
+    </div>
+  );
+};
 
 export default Main;
