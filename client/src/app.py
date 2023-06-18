@@ -18,8 +18,6 @@ gpturi = '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'
     with emotional context of ["quite contemplative"," confused"," tired","somewhat focused","moderately calm","somewhat hungry"] for each line respectively
     """
 
-
-
 samples = [
     # if you want a descriptive emotion of the entire song, use a multi line string
     """
@@ -51,24 +49,6 @@ EMOTIONS = np.array([
     "relieved", "smitten", "sad", "satisfied", "desirous", "ashamed", "negatively surprised", "positively surprised",
     "sympathetic", "tired", "triumphant"
 ])
-
-emotion_history = []
-top_five = {}
-processed = []
-
-@app.route('/')
-def test():
-    return "Testing world"
-
-@app.route('/topfive')
-def top_five_emotions():
-    asyncio.run(get_top_five())
-    return top_five 
-
-@app.route('/process')
-def banana():
-    asyncio.run(stringify_lines())
-    return processed
 
 def get_adjective(score):
     if 0.26 <= score < 0.35:
@@ -111,6 +91,7 @@ async def get_top_five():
 
     return ans
 
+
 async def stringify_lines():
     ans = []
     global processed 
@@ -145,6 +126,24 @@ async def stringify_lines():
             ans.append(a)
 
     processed = ans
+
+top_five = {} # contains top five emotions of a given song in emotion: score value pair 
+processed = [] # contains the stringified description of the emotion of every lyric line in a given song 
+
+asyncio.run(stringify_lines()) # pre floods processed so we can directly put it into gpt prompt 
+
+@app.route('/')
+def test():
+    return "Testing world"
+
+@app.route('/topfive')
+def top_five_emotions():
+    asyncio.run(get_top_five())
+    return top_five 
+
+@app.route('/process')
+def banana():
+    return processed
 
 if __name__ == '__main__':
     app.run()
