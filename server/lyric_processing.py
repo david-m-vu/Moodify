@@ -14,4 +14,6 @@ def parse_text(lyrics):
 
 # Creates Array of Verses from Multiline String
 def parse_text_verse(lyrics):
+    lyrics = remove_spaces(lyrics)
+    lyrics = remove_subtitles(lyrics)
     return lyrics.split("\n\n")
