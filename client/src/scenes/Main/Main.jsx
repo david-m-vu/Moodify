@@ -1,7 +1,7 @@
 import "./Main.css";
 import Song from "../../components/Song/Song.jsx";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -35,13 +35,14 @@ const parseLyrics = (lyrics) => {
     return parsedLyrics;
 }
 
-const Main = () => {
+const Main = (props) => {
   const [input, setInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [currentSong, setCurrentSong] = useState(null);
   const [verses, setVerses] = useState([]);
   const [selectedVerse, setSelectedVerse] = useState([]);
-
+  const [selectedVerseIndex, setSelectedVerseIndex] = useState();
+  const [explanations, setExplanations] = useState([])
 
   const navigate = useNavigate();
 
@@ -61,9 +62,31 @@ const Main = () => {
     } 
   };
 
+  const getExplanations = async (id) => {
+    let response = await fetch(`${baseURL}/gptexplain/${id}`);
+    console.log(response);
+    let responseJSON;
+    if (response.ok) {
+        responseJSON = await response.json();
+    }
+    console.log(responseJSON.items);
+    return responseJSON.items;
+  }
+
+  const getExplanation = () => {
+    return explanations[selectedVerseIndex];
+  }
 
   const handleClickVerse = (verse) => {
     setSelectedVerse(verse);
+
+    let verseIndex = -1;
+    for (let i = 0; i < verses.length; i++) {
+        if (verses[i][0] === selectedVerse[0]) {
+            verseIndex = i;
+        }
+    }
+    setSelectedVerseIndex(verseIndex);
   }
 
   const closeResults = () => {
@@ -95,6 +118,7 @@ const Main = () => {
     closeResults();
     // setLyrics(parseLyrics(songJson.lyrics));
     setVerses(getVerses(parseLyrics(songJson.lyrics)));
+    setExplanations(await getExplanations(song.id));   
   }
 
   const getVerseClassName = (verse) => {
@@ -105,6 +129,21 @@ const Main = () => {
     }
   }
 
+//   useEffect(() => {
+//     // if (!props.initalEmotion) {
+//         const getInitialSong = async () => {
+//             let response = await fetch(`${baseURL}gptrecsong/${props.initialEmotion}`);
+//             let responseJSON;
+//             if (response.ok) {
+//                 responseJSON = await response.json();
+//             }
+    
+//             selectSong(responseJSON);
+//         }
+//         getInitialSong();
+
+//   }, [])
+
   return (
     <div className="Main">
       <div className="songInfo">
@@ -112,7 +151,7 @@ const Main = () => {
       </div>
 
       <div className="title">
-        <h1>Moodify</h1>
+        <h1>MOODIFY</h1>
       </div>
 
       <div className="search">
@@ -164,7 +203,9 @@ const Main = () => {
             })
           }
         </div>
-        <div className="explanation"></div>
+        <div className="explanation">
+            { (explanations.length === 0) ? <p>Loading...</p> : <p>{getExplanation()}</p>}
+        </div>
       </div>
 
       <div className="emotions">
@@ -178,7 +219,7 @@ const Main = () => {
       </div>
 
       <div className="moodifyMe" onClick={() => goLanding()}>
-        <h2>Moodify Me</h2>
+        <h2>Moodify Me Again</h2>
       </div>
     </div>
   );

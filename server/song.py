@@ -25,7 +25,17 @@ def search_song(query):
 
         song_dict["items"].append({"title":title, "artist": artist, "icon": icon_url, "id": id})
 
-    return json.dumps(song_dict)
+    return song_dict
+
+def search_song_single(query):
+    song_single = sp.search(query, 1, type="track")['tracks']['items']
+
+    title = song_single[0]['name']
+    id = song_single[0]['id']
+    artist = song_single[0]["artists"][0]['name']
+    icon_url = song_single[0]["album"]['images'][0]['url']
+
+    return {"title":title, "artist": artist, "icon": icon_url, "id": id}
 
 class Song:
     title = "TITLE"

@@ -1,0 +1,25 @@
+.EmotionChoice {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 50px;
+    width: 150px;
+}
+
+.EmotionChoice > img {
+    height: 200px;
+}
+
+.EmotionChoice > h3 {
+    margin: 10px;
+}
+
+.EmotionChoice:hover {
+    cursor: pointer;
+
+}
+
