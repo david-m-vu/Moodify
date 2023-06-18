@@ -1,4 +1,7 @@
 # Removes Verse Headers
+import re
+
+
 def remove_subtitles(lyrics):
     lyrics = re.sub(r'\[(.*?)\]', '', lyrics)
     

@@ -1,5 +1,7 @@
 from flask import Flask
+import openai
 from lyric_processing import parse_text_verse
+from song import search_song_single
 from song import Song, search_song
 import secret
 import asyncio
@@ -8,29 +10,27 @@ import numpy as np
 from flask import Flask 
 from hume import HumeStreamClient
 from hume.models.config import LanguageConfig
+import secret
 
 app = Flask(__name__)
 
 client_access_token = secret.genius_api_key
 
-# Vinny Stuff
-samples = [
-    # if you want a descriptive emotion of the entire song, use a multi line string
-    """
-    My love was as cruel as the cities I lived in
-    Everyone looked worse in the light
-    There are so many lines that I've crossed unforgiven
-    I'll tell you the truth, but never goodbye
-    """
-] # top five
+## GPT ##
+# Load your API key from an environment variable or secret management service
+openai.organization = secret.organization_id
+openai.api_key = secret.open_ai_key
+openai.Model.list()
 
-samples2 = [
-    # if you want a line by line description of the entire song, pass lyrics in line by line seperated by a comma 
-    "My love was as cruel as the cities I lived in",
-    "Everyone looked worse in the light",
-    "There are so many lines that I've crossed unforgiven",
-    "I'll tell you the truth, but never goodbye"
-] # line by line 
+def send_message(message):
+    response = openai.Completion.create(
+        engine="gpt-3.5-turbo",
+        prompt = message,
+        max_tokens = 50,
+        temperature = 0,
+        n=1,
+        stop=None,
+    )
 
 def load_config():
     with open('./config.json', 'r') as f:
@@ -39,7 +39,7 @@ def load_config():
 
 config = load_config()
 
-gptKey = config["gpturi"]
+## HUME ##
 humeKey = config["hume_key"]
 
 EMOTIONS = np.array([
@@ -91,6 +91,7 @@ async def get_top_five(whole_lyrics):
             process_section(emotions)
 
 async def stringify_lines(lyrics):
+    print(lyrics)
     ans = []
     global processed 
 
@@ -117,7 +118,7 @@ async def stringify_lines(lyrics):
     client = HumeStreamClient(humeKey)
     config = LanguageConfig()
     async with client.connect([config]) as socket:
-        for sample in samples2:
+        for sample in lyrics:
             result = await socket.send_text(sample)
             emotions = result["language"]["predictions"][0]["emotions"]
             a = process_section(emotions)
@@ -129,14 +130,40 @@ top_five = {} # contains top five emotions of a given song in emotion: score val
 processed = [] # contains the stringified description of the emotion of every lyric line in a given song 
 
 # Outputs GPT Explanations
-def gpt_explanation(lyrics):
-    lyrics = parse_text_verse(lyrics)
+def gpt_explain(lyrics):
+    lyrics = parse_text_verse(lyrics.strip("'"))
     asyncio.run(stringify_lines(lyrics)) # pre floods processed so we can directly put it into gpt prompt
 
-    # run gpt on processed stringified emotions + lyrics, use for loop?
+    gpt_explanation = []
+
+    for stanza in lyrics:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a song analyzer."},
+                {"role": "user", "content": "Analze the following stanza: " + stanza}
+            ]
+        )
+
+        message_content = response["choices"][0]["message"]["content"]
+        gpt_explanation.append(message_content)
 
     return gpt_explanation
 
+def gpt_emotion(mood):
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a song finder."},
+            {"role": "user", "content": "Find ONLY 1 song that matches the mood of " + mood 
+             + "Send the song in this format 'title - artist' and only send this"}
+        ]
+    )
+
+    message_content = response["choices"][0]["message"]["content"]
+    return message_content
+
+## ENDPOINTS ##
 @app.route('/')
 def hello():
     return '<h1>Landing Page</h1>'
@@ -147,7 +174,7 @@ def get_song(song_id):
 
 @app.route('/search/<query>')
 def get_search(query):
-    return search_song(query)
+    return json.dumps(search_song(query))
 
 @app.route('/topfive/<song_id>')
 def top_five_emotions(song_id):
@@ -159,8 +186,14 @@ def top_five_emotions(song_id):
 
 @app.route('/gptexplain/<song_id>')
 def gpt_explanation(song_id):
-    gpt_explanation = gpt_explanation(Song(song_id).lyrics)
-    return gpt_explanation
+    gpt_explanation = gpt_explain(Song(song_id).lyrics)
+    return json.dumps({"items": gpt_explanation})
+
+@app.route('/gptrecsong/<mood>')
+def gpt_recsong(mood):
+    gpt_rec = gpt_emotion(mood)
+    print(gpt_rec)
+    return json.dumps(search_song_single(gpt_rec))
 
 if __name__ == '__main__':
     app.run()
