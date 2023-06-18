@@ -1,0 +1,24 @@
+.Song {
+    display: flex;
+    padding: 10px;
+    border: 1px solid white;
+    border-radius: 10px;
+    background-color: #89B0AE;
+}
+
+.Song > img {
+    width: 100px;
+    height: 100px;
+    margin: 0 10px;
+}
+
+.info {
+    margin: 0 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.info > h3 {
+    margin-left: 10px;
+}
