@@ -178,11 +178,10 @@ def get_search(query):
 
 @app.route('/topfive/<song_id>')
 def top_five_emotions(song_id):
-    global top_five
     asyncio.run(get_top_five(Song(song_id).lyrics))
-    top_five = [(k, v) for k, v in top_five.items()]
-    top_five = sorted(top_five, key=lambda x: x[1])
-    return top_five
+    top_five_array = [(k, v) for k, v in top_five.items()]
+    top_five_array = sorted(top_five, key=lambda x: x[1])
+    return top_five_array
 
 @app.route('/gptexplain/<song_id>')
 def gpt_explanation(song_id):
