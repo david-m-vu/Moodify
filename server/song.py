@@ -1,7 +1,6 @@
 import re
-from secret import genius_api_key
 from spotipy.oauth2 import SpotifyClientCredentials
-from secret import spotify_client_id, spotify_client_secret
+from secret import spotify_client_id, spotify_client_secret, genius_api_key
 import spotipy as sp
 from lyricsgenius import Genius
 import json
@@ -67,7 +66,7 @@ class Song:
         self.lyrics = self.gs_song.lyrics
         self.lyrics = '\n'.join(self.lyrics.split('\n')[1:-1])
 
-    def get_json(self):
+    def get_dict(self):
         song_dict = {'title': self.title, 
                 'artist': self.artist,
                 'album': self.album,
@@ -77,9 +76,13 @@ class Song:
                 'duration_s': self.duration_seconds,
                 'lyrics': self.lyrics}  
         
+<<<<<<< Updated upstream
         return json.dumps(song_dict)
 
 # example_parse = remove_subtitles(remove_spaces(Song("2LBqCSwhJGcFQeTHMVGwy3").lyrics))
 # print(example_parse)
 # print(parse_text(example_parse))
     
+=======
+        return song_dict
+>>>>>>> Stashed changes
