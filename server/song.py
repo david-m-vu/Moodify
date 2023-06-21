@@ -76,13 +76,4 @@ class Song:
                 'duration_s': self.duration_seconds,
                 'lyrics': self.lyrics}  
         
-<<<<<<< Updated upstream
-        return json.dumps(song_dict)
-
-# example_parse = remove_subtitles(remove_spaces(Song("2LBqCSwhJGcFQeTHMVGwy3").lyrics))
-# print(example_parse)
-# print(parse_text(example_parse))
-    
-=======
         return song_dict
->>>>>>> Stashed changes
