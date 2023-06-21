@@ -60,7 +60,7 @@ const Landing = (props) => {
     const handleButtonClick = () => {
         setDidChoose(true);
         setScan(true);
-        props.setInitialEmotion(selectedEmotion);
+        props.getInitialSong(selectedEmotion)
     }
 
     return (

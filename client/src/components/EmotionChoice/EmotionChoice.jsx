@@ -1,5 +1,4 @@
 import "./EmotionChoice.css";
-import { useState } from "react";
 
 const EmotionChoice = (props) => {
 
