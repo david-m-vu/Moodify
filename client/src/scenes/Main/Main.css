@@ -41,6 +41,7 @@
     bottom: 0;
     display: flex;
     align-items: flex-end;
+    justify-content: flex-end;
 }
 
 .inputs > input {
@@ -92,28 +93,48 @@
 
 .mainSection {
     grid-area: exp;
+    display: flex;
+    flex: 1;
     background-color: #703D57;
     margin: 10px 0 10px 10px;
     padding: 10px 20px 20px 20px;
     border-radius: 10px;
-    overflow-y: scroll;
     box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);
     opacity: 0.9;
-
+    overflow-y: scroll;
 }
 
 .lyrics {
     color: #FAF9F9;
-    opacity: 0.9;
     font-size: 18px;
-    max-width: 50%;
+    padding-right: 10px;
     margin-right: 10px;
     border-right: 2px solid black;
+    overflow-y: scroll;
+}
+
+.explanation {
+    overflow-y: scroll;
+    max-width: 50%;
+    max-height: 100%;
+}
+
+::-webkit-scrollbar {
+    width: 0px;
+    background: transparent;
 }
 
 .lyric-text {
     margin: 0.5em;
 }
+
+.explanationText {
+    color: white;
+    font-size: 18px;
+    line-height: 1.5em;
+    color: #FF958C;
+}
+
 .highlighted-verse {
     border: 1px solid white;
     box-sizing: border-box;
@@ -124,11 +145,6 @@
     cursor: pointer;
         box-sizing: border-box;
 
-}
-
-::-webkit-scrollbar {
-    width: 0px;
-    background: transparent;
 }
 
 .invisible {

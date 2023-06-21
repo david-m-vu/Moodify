@@ -9,12 +9,15 @@ const waitMessages = [
     "Finding the perfect song..."
 ]
 
+const emotions = ["Happy", "Sad", "Angry", "Calm", "Disgusted"];
+
+
 const Landing = (props) => {
     const [waitMessageIndex, setWaitMessageIndex] = useState(0)
     const [waitMessage, setWaitMessage] = useState(waitMessages[0]);
     const [scan, setScan] = useState(false);
-    const [chose, setChose] = useState(false);
-    const [selected, setSelected] = useState("")
+    const [didChoose, setDidChoose] = useState(false);
+    const [selectedEmotion, setSelectedEmotion] = useState("")
 
     const navigate = useNavigate();
 
@@ -31,19 +34,15 @@ const Landing = (props) => {
     }
 
     const getChoiceClassName = () => {
-        if (!chose) {
+        if (!didChoose) {
             return "emotionChoices"
         } else {
             return "emotionChoices-dissapear"
         }
     }
 
-    // const getWaitingMessageClassName = () => {
-    //     if (chose)
-    // }
-
     const getEmotionClassName = (emotion) => {
-        if (emotion === selected) {
+        if (emotion === selectedEmotion) {
             return "selectedEmotion";
         } else {
             return "unselectedEmotion";
@@ -51,7 +50,7 @@ const Landing = (props) => {
     }
 
     const getEmoButtonClass = () => {
-        if (selected) {
+        if (selectedEmotion) {
             return "emoButtonDark"
         } else {
             return "emoButton";
@@ -59,9 +58,9 @@ const Landing = (props) => {
     }
 
     const handleButtonClick = () => {
-        setChose(true);
+        setDidChoose(true);
         setScan(true);
-        props.setInitialEmotion(selected);
+        props.setInitialEmotion(selectedEmotion);
     }
 
     return (
@@ -73,20 +72,21 @@ const Landing = (props) => {
 
         <div className={getChoiceClassName()}>
             <div className="cards">
-                <div className={getEmotionClassName("happy")}><EmotionChoice select={setSelected} emotion="Happy"/></div>
-                <div className={getEmotionClassName("sad")}><EmotionChoice select={setSelected} emotion="Sad"/></div>
-                <div className={getEmotionClassName("angry")}><EmotionChoice select={setSelected} emotion="Angry"/></div>
-                <div className={getEmotionClassName("calm")}><EmotionChoice select={setSelected} emotion="Calm"/></div>
-                <div className={getEmotionClassName("disgusted")}><EmotionChoice select={setSelected} emotion="Disgusted"/></div>
+                <div className={getEmotionClassName("happy")}><EmotionChoice select={setSelectedEmotion} emotion="Happy"/></div>
+                <div className={getEmotionClassName("sad")}><EmotionChoice select={setSelectedEmotion} emotion="Sad"/></div>
+                <div className={getEmotionClassName("angry")}><EmotionChoice select={setSelectedEmotion} emotion="Angry"/></div>
+                <div className={getEmotionClassName("calm")}><EmotionChoice select={setSelectedEmotion} emotion="Calm"/></div>
+                <div className={getEmotionClassName("disgusted")}><EmotionChoice select={setSelectedEmotion} emotion="Disgusted"/></div>
+
             </div>
-            <button className={getEmoButtonClass()} onClick={handleButtonClick}>I'M {selected}</button>
+            <button className={getEmoButtonClass()} onClick={handleButtonClick}>I'M {selectedEmotion}</button>
         </div>
 
         { scan && <div className="scan">
           <div className="waitMessage">{waitMessage}</div>
         </div>}
 
-        {chose && (
+        {didChoose && (
           <div className="next">
             <span className="subTitle">Your curated song is ready!</span>
             <div id="arrowIcon" onClick={() => goMain()}>

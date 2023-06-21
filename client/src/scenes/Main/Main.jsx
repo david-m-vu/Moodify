@@ -2,47 +2,23 @@ import "./Main.css";
 import Song from "../../components/Song/Song.jsx";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect} from "react";
+
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from '@mui/icons-material/Close';
 
-const baseURL = "http://127.0.0.1:5000/";
-
-const tempEmotions = {
-  Love: 0.53,
-  Romance: 0.42,
-  Desire: 0.24,
-  Adoration: 0.19,
-  Sadness: 0.17,
-};
-
-const parseLyrics = (lyrics) => {
-    let newlineParsedLyrics = lyrics.split("\n");
-    let parsedLyrics = [];
-
-    for (let i = 0; i < newlineParsedLyrics.length; i++) {
-        
-        if (newlineParsedLyrics[i] !== '') {
-            if (newlineParsedLyrics[i][0] === "[" && newlineParsedLyrics[i][newlineParsedLyrics[i].length - 1] === "]") {
-                parsedLyrics.push("-")
-            }
-            parsedLyrics.push(newlineParsedLyrics[i]);
-        } 
-
-        if (parsedLyrics[0] === '-') {
-            parsedLyrics = parsedLyrics.slice(1, parsedLyrics.length);
-        }
-    }
-    return parsedLyrics;
-}
+import { parseLyrics } from "../../util/util";
+import { getExplanations, searchSongs, getEmotions, retrieveSong } from "../../util/requests"
 
 const Main = (props) => {
   const [input, setInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [currentSong, setCurrentSong] = useState(null);
-  const [verses, setVerses] = useState([]);
   const [selectedVerse, setSelectedVerse] = useState([]);
   const [selectedVerseIndex, setSelectedVerseIndex] = useState();
+  
+  const [currentSong, setCurrentSong] = useState(null);
+  const [verses, setVerses] = useState([]);
   const [explanations, setExplanations] = useState([])
+  const [topEmotions, setTopEmotions] = useState([]);
 
   const navigate = useNavigate();
 
@@ -50,48 +26,21 @@ const Main = (props) => {
     navigate("../");
   };
 
-  const handleInputChange = async (event) => {
-    setInput(event.target.value);
-    if (input !== "") {
-      let response = await fetch(`${baseURL}search/${input}`);
-      let responseJson;
-      if (response.ok) {
-        responseJson = await response.json();
-      }
-        setSearchResults(responseJson.items.slice(0, 5));
-    } 
-  };
-
-  const getExplanations = async (id) => {
-    let response = await fetch(`${baseURL}/gptexplain/${id}`);
-    console.log(response);
-    let responseJSON;
-    if (response.ok) {
-        responseJSON = await response.json();
-    }
-    console.log(responseJSON.items);
-    return responseJSON.items;
-  }
-
-  const getExplanation = () => {
-    return explanations[selectedVerseIndex];
-  }
-
-  const handleClickVerse = (verse) => {
-    setSelectedVerse(verse);
-
-    let verseIndex = -1;
-    for (let i = 0; i < verses.length; i++) {
-        if (verses[i][0] === selectedVerse[0]) {
-            verseIndex = i;
-        }
-    }
-    setSelectedVerseIndex(verseIndex);
-  }
-
   const closeResults = () => {
     setSearchResults([]);
     setInput("");
+  }
+
+  const handleInputChange = async (event) => {
+    setInput(event.target.value);
+    let searchResults = await searchSongs(input);
+    if (searchResults) {
+      setSearchResults(searchResults.slice(0, 5));
+    }
+  };
+
+  const getExplanation = () => {
+    return explanations[selectedVerseIndex];
   }
 
   const getVerses = (lyrics) => {
@@ -109,30 +58,21 @@ const Main = (props) => {
   }
 
   const selectSong = async (song) => {
-    let songResponse = await fetch(`http://127.0.0.1:5000/song/${song.id}`);
-    let songJson;
-    if (songResponse.ok) {
-        songJson = await songResponse.json();
-    }
-    setCurrentSong(songJson);
-    closeResults();
-    // setLyrics(parseLyrics(songJson.lyrics));
-    setVerses(getVerses(parseLyrics(songJson.lyrics)));
-    setExplanations(await getExplanations(song.id));   
-  }
+    let retrievedSong = await retrieveSong(song.id);
 
-  const getVerseClassName = (verse) => {
-    if (verse[0] === selectedVerse[0]) {
-        return "highlighted-verse";
-    } else {
-        return "regular-verse";
-    }
+    setCurrentSong(retrievedSong);
+    closeResults();
+
+    // setLyrics(parseLyrics(songJson.lyrics));
+    setVerses(getVerses(parseLyrics(retrievedSong.lyrics)));
+    setExplanations(await getExplanations(retrievedSong.id));   
+    setTopEmotions(await getEmotions(currentSong));
   }
 
 //   useEffect(() => {
 //     // if (!props.initalEmotion) {
 //         const getInitialSong = async () => {
-//             let response = await fetch(`${baseURL}gptrecsong/${props.initialEmotion}`);
+//             let response = await fetch(`${baseURL}/gptrecsong/${props.initialEmotion}`);
 //             let responseJSON;
 //             if (response.ok) {
 //                 responseJSON = await response.json();
@@ -143,6 +83,26 @@ const Main = (props) => {
 //         getInitialSong();
 
 //   }, [])
+
+const handleClickVerse = (verse) => {
+  setSelectedVerse(verse);
+
+  let verseIndex = -1;
+  for (let i = 0; i < verses.length; i++) {
+      if (verses[i][0] === verse[0]) {
+          verseIndex = i;
+      }
+  }
+  setSelectedVerseIndex(verseIndex);
+}
+
+const getVerseClassName = (verse) => {
+  if (verse[0] === selectedVerse[0]) {
+      return "highlighted-verse";
+  } else {
+      return "regular-verse";
+  }
+}
 
   return (
     <div className="Main">
@@ -156,6 +116,7 @@ const Main = (props) => {
 
       <div className="search">
         <div className="inputs">
+          <SearchIcon fontSize="large" />
           <input
             list="searchResults"
             type="text"
@@ -163,7 +124,7 @@ const Main = (props) => {
             value={input}
             onChange={handleInputChange}
           />
-          <SearchIcon fontSize="large" />
+
           {(searchResults && searchResults.length !== 0) && (
             <div className="results">
               {searchResults.map((result) => {
@@ -198,19 +159,18 @@ const Main = (props) => {
                 }
                 </div>
                 </div>
-
                 )
             })
           }
         </div>
         <div className="explanation">
-            { (explanations.length === 0) ? <p>Loading...</p> : <p>{getExplanation()}</p>}
+            { (explanations.length === 0) ? <p>Loading...</p> : <p className="explanationText">{getExplanation()}</p>}
         </div>
       </div>
 
       <div className="emotions">
         <div className="emotionsList">
-          {Object.entries(tempEmotions).map(([emotion, score]) => {
+          {Object.entries(topEmotions).map(([emotion, score]) => {
             return (
               <p className="emotionText">{`${emotion} ${score * 100}%`}</p>
             );
