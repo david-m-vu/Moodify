@@ -60,7 +60,9 @@ def loadallinfo(song_id):
     top_five = top_five_song(song.lyrics)
 
     # list of dictionaries with list of moods and list of explanations
-    top_five_verse = top_five_stanza(song.lyrics)
+    # top_five_verse = top_five_stanza(song.lyrics)
 
     return json.dumps({"song": song_rep, "gpt_explanation": gpt_explanation, 
-                       "top_five_whole": top_five, "top_five_verse": top_five_verse})
+                       "top_five_whole": top_five}) 
+
+# "top_five_verse": top_five_verse}
