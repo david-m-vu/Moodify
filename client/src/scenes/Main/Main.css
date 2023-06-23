@@ -20,25 +20,14 @@
     --stagger-delay: 100ms;
 }
 
-@keyframes cardEntrance {
-    from {
-        opacity: 0;
-        transform: scale(0.3);
-        filter: hue-rotate(180deg);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-        filter: hue-rotate(0deg);
-    }
-}
-
 .songInfo {
     grid-area: info;
+    position: absolute;
+    width: 100%;
     margin: 10px;
     opacity: 0.9;
-    animation: cardEntrance 5s ease-out;
-    /* animation-fill-mode: backwards; */
+    animation: songInfoEntrance 2s ease;
+    animation-fill-mode: backwards;
 }
 
 .title {
@@ -111,6 +100,7 @@
 .mainSection {
     grid-area: exp;
     display: flex;
+    position: relative;
     flex: 1;
     background-color: #703D57;
     margin: 10px 0 10px 10px;
@@ -118,22 +108,29 @@
     border-radius: 10px;
     box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);
     opacity: 0.9;
-    overflow-y: scroll;
+    animation: songInfoEntrance 2s ease;
+    animation-fill-mode: backwards;
+    animation-delay: calc(1 * var(--stagger-delay));
 }
 
 .lyrics {
+    position: absolute;
     color: #FAF9F9;
     font-size: 18px;
     padding-right: 10px;
-    margin-right: 10px;
     border-right: 2px solid black;
     overflow-y: scroll;
+    height: calc(100% - 20px);
+    width: calc(50% - 40px);
 }
 
 .explanation {
+    position: absolute;
+    padding-left: 10px;
+    left: 50%;
     overflow-y: scroll;
-    max-width: 50%;
-    max-height: 100%;
+    height: calc(100% - 20px);
+    width: calc(50% - 30px);
 }
 
 ::-webkit-scrollbar {
@@ -152,17 +149,18 @@
     color: #FF958C;
 }
 
+.regular-verse {
+    opacity: 0.5;
+}
+
 .highlighted-verse {
-    border: 1px solid white;
-    box-sizing: border-box;
+    opacity: 1;
 }
 
 .highlighted-verse:hover,
 .regular-verse:hover {
-    border: 1px solid white;
+    opacity: 1;
     cursor: pointer;
-    box-sizing: border-box;
-
 }
 
 .invisible {
@@ -190,11 +188,13 @@
     box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);
     color: #FAF9F9;
     opacity: 0.9;
-
+    animation: pop-up ease 2s;
+    animation-fill-mode: backwards;
+    animation-delay: calc(1 * var(--stagger-deylay));
 }
 
 .emotionsList {
-    margin-top: 30%;
+    margin-top: 50%;
 }
 
 .emotionText {
@@ -204,32 +204,50 @@
 }
 
 .emotionText:nth-child(1) {
-    color: #A690A4;
+    color: #ddcb27;
+    animation: emotion-up ease 2s;
+    animation-fill-mode: backwards;
+    animation-delay: calc(2 * var(--stagger-delay));
 }
 
 .emotionText:nth-child(2) {
     font-size: calc(var(--base-font-size) * 0.9px);
     opacity: 0.9;
+    animation: emotion-up ease 2s;
+    animation-fill-mode: backwards;
+    animation-delay: calc(3 * var(--stagger-delay));
 }
 
 .emotionText:nth-child(3) {
     font-size: calc(var(--base-font-size) * 0.8px);
     opacity: 0.8;
+    animation: emotion-up ease 2s;
+    animation-fill-mode: backwards;
+    animation-delay: calc(4 * var(--stagger-delay));
 }
 
 .emotionText:nth-child(4) {
     font-size: calc(var(--base-font-size) * 0.7px);
     opacity: 0.7;
+    animation: emotion-up ease 2s;
+    animation-fill-mode: backwards;
+    animation-delay: calc(5 * var(--stagger-delay));
 }
 
 .emotionText:nth-child(5) {
     font-size: calc(var(--base-font-size) * 0.6px);
     opacity: 0.6;
+    animation: emotion-up ease 2s;
+    animation-fill-mode: backwards;
+    animation-delay: calc(6 * var(--stagger-delay));
 }
 
 .emotionText:nth-child(6) {
     font-size: calc(var(--base-font-size) * 0.5px);
-    opacity: 0.5.
+    opacity: 0.5;
+    animation: emotion-up ease 2s;
+    animation-fill-mode: backwards;
+    animation-delay: calc(7 * var(--stagger-delay));
 }
 
 .moodifyMe {
@@ -246,4 +264,37 @@
 .moodifyMe:hover {
     cursor: pointer;
     border: 1px solid white;
+}
+
+@keyframes songInfoEntrance {
+    from {
+        opacity: 0;
+        filter: hue-rotate(180deg);
+        left: -50%;
+    }
+    to {
+        filter: hue-rotate(0deg);
+        left: 0%;
+    }
+}
+
+@keyframes pop-up {
+    from {
+        opacity: 0;
+        filter: hue-rotate(180deg);
+        transform: scale(0.3);
+    }
+    to {
+        filter: hue-rotate(0deg);
+        transform: scale(1);
+    }
+}
+
+@keyframes emotion-up {
+    from {
+        opacity: 0;
+        transform: translate(0, 2000px);
+    } 
+    to {
+    }
 }

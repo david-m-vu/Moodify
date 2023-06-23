@@ -11,8 +11,7 @@ import { searchSongs } from "../../util/requests";
 const Main = (props) => {
   const [input, setInput] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const [selectedVerse, setSelectedVerse] = useState([]);
-  const [selectedVerseIndex, setSelectedVerseIndex] = useState();
+  const [selectedVerseIndex, setSelectedVerseIndex] = useState(0);
 
   const navigate = useNavigate();
 
@@ -38,20 +37,12 @@ const Main = (props) => {
     closeResults();
   };
 
-  const handleClickVerse = (verse) => {
-    setSelectedVerse(verse);
+  // const handleClickVerse = (index) => {
+  //   setSelectedVerseIndex(index);
+  // };
 
-    let verseIndex = -1;
-    for (let i = 0; i < props.verses.length; i++) {
-      if (props.verses[i][0] === verse[0]) {
-        verseIndex = i;
-      }
-    }
-    setSelectedVerseIndex(verseIndex);
-  };
-
-  const getVerseClassName = (verse) => {
-    if (verse[0] === selectedVerse[0]) {
+  const getVerseClassName = (index) => {
+    if (index === selectedVerseIndex) {
       return "highlighted-verse";
     } else {
       return "regular-verse";
@@ -60,15 +51,15 @@ const Main = (props) => {
 
   return (
     <div className="Main">
-      <div className="songInfo">
-        {props.currentSong && (
+      { props.currentSong &&
+        <div className="songInfo">
           <Song
             title={props.currentSong.title}
             artist={props.currentSong.artist}
             cover={props.currentSong.cover}
           />
-        )}
-      </div>
+        </div>
+      }
 
       <div className="title">
         <h1>MOODIFY</h1>
@@ -108,6 +99,7 @@ const Main = (props) => {
         </div>
       </div>
 
+      { props.currentSong && 
       <div className="mainSection">
         <div className="lyrics">
           {props.verses.length !== 0 &&
@@ -115,8 +107,8 @@ const Main = (props) => {
               return (
                 <div className="verse" key={index}>
                   <div
-                    className={getVerseClassName(verse)}
-                    onClick={() => handleClickVerse(verse)}
+                    className={getVerseClassName(index)}
+                    onClick={() => setSelectedVerseIndex(index)}
                     key={index}
                   >
                     {verse.map((lyric, index) => {
@@ -139,8 +131,10 @@ const Main = (props) => {
             </p>
           )}
         </div>
-      </div>
+      </div> 
+      }
 
+      { props.currentSong && 
       <div className="emotions">
         <div className="emotionsList">
           {Object.entries(props.topEmotions).map(([emotion, score], index) => {
@@ -150,6 +144,7 @@ const Main = (props) => {
           })}
         </div>
       </div>
+    } 
 
       <div className="moodifyMe" onClick={() => goLanding()}>
         <h2>Moodify Me Again</h2>

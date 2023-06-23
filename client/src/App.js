@@ -23,6 +23,7 @@ function App() {
 
 
   const selectSong = async (song) => {
+    setCurrentSong(null);
     let retrievedSong = await retrieveSong(song.id);
     setCurrentSong(retrievedSong);
 
