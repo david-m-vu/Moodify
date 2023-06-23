@@ -7,16 +7,20 @@ import Main from "./scenes/Main/Main.jsx";
 import { parseLyrics } from "./util/util";
 import {
   getExplanations,
-  getEmotions,
+  getEmotionScores,
   retrieveSong,
   gptRecSong
 } from "./util/requests";
+
+
 
 function App() {
   const [currentSong, setCurrentSong] = useState(null);
   const [verses, setVerses] = useState([]);
   const [explanations, setExplanations] = useState([]);
   const [topEmotions, setTopEmotions] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const selectSong = async (song) => {
     let retrievedSong = await retrieveSong(song.id);
@@ -26,8 +30,9 @@ function App() {
 
     // setLyrics(parseLyrics(songJson.lyrics));
     setVerses(getVerses(parseLyrics(retrievedSong.lyrics)));
+    setTopEmotions(await getEmotionScores(retrievedSong));
     setExplanations(await getExplanations(retrievedSong.id));
-    setTopEmotions(await getEmotions(currentSong));
+    setIsLoading(false);
   };
 
   const getExplanation = (selectedVerseIndex) => {
@@ -59,7 +64,9 @@ function App() {
         <Routes>
           <Route
             path="/"
-            element={<Landing getInitialSong={getInitialSong} />}
+            element={<Landing getInitialSong={getInitialSong}
+            isLoading={isLoading} 
+            setIsLoading={setIsLoading}/>}
           />
           <Route
             path="/main"

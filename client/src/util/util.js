@@ -17,3 +17,11 @@ export const parseLyrics = (lyrics) => {
     }
     return parsedLyrics;
 }
+
+export const formatEmotionScores = (emotions, scores) => {
+    let emotionsObj = {};
+    for (let i = 0; i < emotions.length; i++) {
+        emotionsObj[emotions[i]] = Math.floor(scores[i] * 100);
+    }
+    return emotionsObj;
+}

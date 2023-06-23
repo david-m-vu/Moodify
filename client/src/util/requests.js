@@ -1,3 +1,5 @@
+import { formatEmotionScores } from "./util.js"
+
 const baseURL = "http://127.0.0.1:5000";
 
 const sampleExplanations = [
@@ -17,13 +19,10 @@ const sampleExplanations = [
   "exp 14",
 ];
 
-const tempEmotions = {
-  Love: 0.53,
-  Romance: 0.42,
-  Desire: 0.24,
-  Adoration: 0.19,
-  Sadness: 0.17,
-};
+const tempEmotions = [{
+  emotions: ["Bro", "Adoration", "Romance", "Desire", "Sadness"],
+  scores: [0.3333, 0.2732, 0.1619, 0.1232, 0.1121]
+}];
 
 export const getExplanations = async (id) => {
   // let response = await fetch(`${baseURL}/gptexplain/${id}`);
@@ -67,12 +66,13 @@ export const gptRecSong = async (emotion) => {
   }
 };
 
-export const getEmotions = async (currentSong) => {
+export const getEmotionScores = async (currentSong) => {
   // let response = await fetch(`${baseURL}/topfive/${currentSong.id}`);
-
+  // let responseJSON;
   // if (response.ok) {
-
+  //   responseJSON = await response.json();
   // }
+  // return formatEmotionScores(responseJSON[0].emotions, responseJSON[0].scores);
 
-  return tempEmotions;
-};
+  return formatEmotionScores(tempEmotions[0].emotions, tempEmotions[0].scores);
+};  

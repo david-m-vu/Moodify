@@ -1,18 +1,16 @@
 import re
-from secret import genius_api_key
 from spotipy.oauth2 import SpotifyClientCredentials
-from secret import spotify_client_id, spotify_client_secret
+from secret import spotify_client_id, spotify_client_secret, genius_api_key
 import spotipy as sp
 from lyricsgenius import Genius
-import json
 
-sp = sp.Spotify(auth_manager=SpotifyClientCredentials(client_id=spotify_client_id, 
+spotifyClient = sp.Spotify(auth_manager=SpotifyClientCredentials(client_id=spotify_client_id, 
                                                       client_secret=spotify_client_secret))
 
 gs = Genius(genius_api_key)
 
 def search_song(query):
-    song_list = sp.search(query, 10, type="track")['tracks']['items']
+    song_list = spotifyClient.search(query, 10, type="track")['tracks']['items']
 
     song_dict = {"items":[]}
     
@@ -28,7 +26,7 @@ def search_song(query):
     return song_dict
 
 def search_song_single(query):
-    song_single = sp.search(query, 1, type="track")['tracks']['items']
+    song_single = spotifyClient.search(query, 1, type="track")['tracks']['items']
 
     title = song_single[0]['name']
     id = song_single[0]['id']
@@ -46,7 +44,7 @@ class Song:
     lyrics = ""
 
     def __init__(self, id):
-        self.track_item = sp.track(id)
+        self.track_item = spotifyClient.track(id)
 
         self.title = self.track_item['name']
         self.artist = self.track_item["artists"][0]['name']
@@ -67,7 +65,7 @@ class Song:
         self.lyrics = self.gs_song.lyrics
         self.lyrics = '\n'.join(self.lyrics.split('\n')[1:-1])
 
-    def get_json(self):
+    def get_dict(self):
         song_dict = {'title': self.title, 
                 'artist': self.artist,
                 'album': self.album,
@@ -77,8 +75,4 @@ class Song:
                 'duration_s': self.duration_seconds,
                 'lyrics': self.lyrics}  
         
-        return json.dumps(song_dict)
-
-# example_parse = remove_subtitles(remove_spaces(Song("2LBqCSwhJGcFQeTHMVGwy3").lyrics))
-# print(example_parse)
-# print(parse_text(example_parse))
+        return song_dict

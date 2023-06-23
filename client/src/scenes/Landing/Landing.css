@@ -43,12 +43,7 @@
     animation-fill-mode: forwards;
 }
 
-.cards {
-    display: flex;
-    flex-direction: row;
-}
-
-.emotionChoices-dissapear {
+.emotionChoices-dissappear {
     position: absolute;
     display: flex;
     flex-direction: column;
@@ -58,6 +53,11 @@
     transform: translate(0, -50%);
     animation: fly-up 1s ease-in 1;
     animation-fill-mode: forwards; 
+}
+
+.cards {
+    display: flex;
+    flex-direction: row;
 }
 
 .selectedEmotion {
@@ -85,7 +85,7 @@
     cursor: pointer;
 }
 
-.scan {
+.loading {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -94,12 +94,21 @@
     width: 100%;
     bottom: -50%;
     transform: translate(0, 50%);
-    animation: fly-up-up 5s ease 1;
+    animation: fly-up-bottom 1s ease-out 1;
     animation-fill-mode: forwards;
 }
 
-.waitMessage {
-    margin: 1em;
+.loading-dissappear {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    transform: translate(0, -50%);
+    animation: fly-up 1s ease-in 1;
+    animation-fill-mode: forwards; 
 }
 
 .next {
@@ -111,7 +120,7 @@
     width: 100%;
     bottom: -50%;
     transform: translate(0, 50%);
-    animation: fly-up-bottom 1s ease-out 1 3s;
+    animation: fly-up-bottom 1s ease-out 1;
     animation-fill-mode: forwards;
 }
 
@@ -140,21 +149,5 @@
     to {
         bottom: 50%;
         opacity: 1;
-    }
-}
-
-@keyframes fly-up-up {
-    from {
-        bottom: -50%;
-        opacity: 0;
-    }
-    50% {
-        bottom: 50%;
-        opacity: 1
-    }
-
-    to {
-        bottom: 100%;
-        opacity: 0;
     }
 }

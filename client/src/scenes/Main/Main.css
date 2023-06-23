@@ -3,6 +3,7 @@
 }
 
 .Main {
+    position: relative;
     display: grid;
     min-height: 100%;
     min-width: 100%;
@@ -15,13 +16,29 @@
     grid-template-rows: 130px 1fr 60px;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
-    position: relative;
+
+    --stagger-delay: 100ms;
+}
+
+@keyframes cardEntrance {
+    from {
+        opacity: 0;
+        transform: scale(0.3);
+        filter: hue-rotate(180deg);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+        filter: hue-rotate(0deg);
+    }
 }
 
 .songInfo {
     grid-area: info;
     margin: 10px;
     opacity: 0.9;
+    animation: cardEntrance 5s ease-out;
+    /* animation-fill-mode: backwards; */
 }
 
 .title {
@@ -44,14 +61,14 @@
     justify-content: flex-end;
 }
 
-.inputs > input {
+.inputs>input {
     border: none;
     outline: 0;
     padding: 10px;
     margin: 10px 10px 0 10px;
     background-color: rgba(255, 255, 255, 0.33);
     border-radius: 10px;
-    height: 20%;    
+    height: 20%;
 }
 
 .inputs {
@@ -140,10 +157,11 @@
     box-sizing: border-box;
 }
 
-.highlighted-verse:hover, .regular-verse:hover {
+.highlighted-verse:hover,
+.regular-verse:hover {
     border: 1px solid white;
     cursor: pointer;
-        box-sizing: border-box;
+    box-sizing: border-box;
 
 }
 

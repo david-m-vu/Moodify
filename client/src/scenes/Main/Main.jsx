@@ -78,7 +78,6 @@ const Main = (props) => {
         <div className="inputs">
           <SearchIcon fontSize="large" />
           <input
-            list="searchResults"
             type="text"
             placeholder="Search for more songs"
             value={input}
@@ -87,10 +86,11 @@ const Main = (props) => {
 
           {searchResults && searchResults.length !== 0 && (
             <div className="results">
-              {searchResults.map((result) => {
+              {searchResults.map((result, index) => {
                 return (
                   <div
                     className="result"
+                    key={index}
                     onClick={() => handleChooseSong(result)}
                   >
                     <p>
@@ -111,18 +111,19 @@ const Main = (props) => {
       <div className="mainSection">
         <div className="lyrics">
           {props.verses.length !== 0 &&
-            props.verses.map((verse) => {
+            props.verses.map((verse, index) => {
               return (
-                <div className="verse">
+                <div className="verse" key={index}>
                   <div
                     className={getVerseClassName(verse)}
                     onClick={() => handleClickVerse(verse)}
+                    key={index}
                   >
-                    {verse.map((lyric) => {
+                    {verse.map((lyric, index) => {
                       if (lyric === "-") {
-                        return <br></br>;
+                        return <br key={index}></br>;
                       }
-                      return <p className="lyric-text">{lyric}</p>;
+                      return <p className="lyric-text" key={index}>{lyric}</p>;
                     })}
                   </div>
                 </div>
@@ -142,9 +143,9 @@ const Main = (props) => {
 
       <div className="emotions">
         <div className="emotionsList">
-          {Object.entries(props.topEmotions).map(([emotion, score]) => {
+          {Object.entries(props.topEmotions).map(([emotion, score], index) => {
             return (
-              <p className="emotionText">{`${emotion} ${score * 100}%`}</p>
+              <p className="emotionText" key={index}>{`${emotion} ${score}%`}</p>
             );
           })}
         </div>
