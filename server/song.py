@@ -64,6 +64,7 @@ class Song:
         self.gs_song = gs.search_song(self.title, self.artist)
         self.lyrics = self.gs_song.lyrics
         self.lyrics = '\n'.join(self.lyrics.split('\n')[1:-1])
+        print(self.lyrics)
 
     def get_dict(self):
         song_dict = {'title': self.title, 

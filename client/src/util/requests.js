@@ -67,12 +67,12 @@ export const gptRecSong = async (emotion) => {
 };
 
 export const getEmotionScores = async (currentSong) => {
-  // let response = await fetch(`${baseURL}/topfive/${currentSong.id}`);
-  // let responseJSON;
-  // if (response.ok) {
-  //   responseJSON = await response.json();
-  // }
-  // return formatEmotionScores(responseJSON[0].emotions, responseJSON[0].scores);
+  let response = await fetch(`${baseURL}/topfive/${currentSong.id}`);
+  let responseJSON;
+  if (response.ok) {
+    responseJSON = await response.json();
+  }
+  return formatEmotionScores(responseJSON[0].emotions, responseJSON[0].scores);
 
-  return formatEmotionScores(tempEmotions[0].emotions, tempEmotions[0].scores);
+  // return formatEmotionScores(tempEmotions[0].emotions, tempEmotions[0].scores);
 };  

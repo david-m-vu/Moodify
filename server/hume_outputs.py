@@ -41,10 +41,13 @@ samples = [
 async def top_five_async(lyrics_array):
     config = LanguageConfig()
 
+    # print("bro1")
     async with humeClient.connect([config]) as socket:
         items = []
 
+        # print("Bro2")
         for lyrics in lyrics_array:
+            # print("bro3")
             result = await socket.send_text(lyrics)
             emotions = result["language"]["predictions"][0]["emotions"]
             emotions_sort = sorted(emotions, key=lambda x: -x['score'])
