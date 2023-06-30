@@ -2,7 +2,6 @@ import "./Landing.css"
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"
 import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
-import EmotionChoice from "../../components/EmotionChoice/EmotionChoice.jsx"
 
 const waitMessages = [
     "Scanning emotions...",
@@ -71,34 +70,34 @@ const Landing = (props) => {
     }
 
     return (
-      <div className="Landing">
-        <div className="titleText">
-          <h1>Moodify</h1>
-          <span className="subTitle">Emo-lyrical Analysis</span>
-        </div>
+        <div className="Landing">
+            <div className="titleText">
+                <h1>MOODIFY</h1>
+                <span className="subTitle">Emo-lyrical Analysis</span>
+            </div>
 
-        <div className={getChoicesClassName()}>
-            <div className="cards">
-                {emotions.map((emotion, index) => {
-                    return <div key={index} className={getEmotionClassName(emotion.toLowerCase())}>
-                        <EmotionChoice select={setSelectedEmotion} emotion={emotion} key={index}/>
+            <div className={getChoicesClassName()}>
+                <div className="cards">
+                    {emotions.map((emotion, index) => {
+                        return <div key={index} className={getEmotionClassName(emotion.toLowerCase())} onClick={() => setSelectedEmotion(emotion.toLowerCase())}>
+                            <h3>{emotion}</h3>
+                        </div>
+                    })}
+                </div>
+                <button className={getEmoButtonClassName()} onClick={handleButtonClick}>I'M {selectedEmotion}</button>
+            </div>
+
+            {(didChoose) && <div className={getLoadingClassName()}>{waitMessage}</div>}
+
+            {(!props.isLoading && didChoose) && (
+                <div className="next">
+                    <span className="subTitle">Your curated song is ready!</span>
+                    <div id="arrowIcon" onClick={() => goMain()}>
+                        <ArrowCircleRightIcon fontSize="large" />
                     </div>
-                })}
-            </div>
-            <button className={getEmoButtonClassName()} onClick={handleButtonClick}>I'M {selectedEmotion}</button>
+                </div>
+            )}
         </div>
-
-        { (didChoose) && <div className={getLoadingClassName()}>{waitMessage}</div>}
-
-        { (!props.isLoading && didChoose) && (
-          <div className="next">
-            <span className="subTitle">Your curated song is ready!</span>
-            <div id="arrowIcon" onClick={() => goMain()}>
-              <ArrowCircleRightIcon fontSize="large" />
-            </div>
-          </div>
-        )}
-      </div>
     );
 }
 

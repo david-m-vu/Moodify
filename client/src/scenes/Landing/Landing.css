@@ -5,7 +5,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #A690A4;
+    background-color: #84DCCF;
     font-size: 24px;
     overflow: hidden;
 }
@@ -48,7 +48,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
     top: 50%;
     transform: translate(0, -50%);
     animation: fly-up 1s ease-in 1;
@@ -60,9 +59,29 @@
     flex-direction: row;
 }
 
+.selectedEmotion, .unselectedEmotion {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 50px;
+    width: 150px;
+}
+
+.selectedEmotion > h3, .unselectedEmotion > h3 {
+    margin: 10px;
+}
+
+.selectedEmotion:hover, .unselectedEmotion:hover {
+    cursor: pointer;
+}
+
 .selectedEmotion {
-    border: 2px solid white;
-    border-radius: 5px;
+    background-color: black;
+    color: white;
+    animation: darken 200ms ease 1;
 }
 
 .emoButton, .emoButtonDark {
@@ -79,6 +98,7 @@
 .emoButtonDark {
     background-color: rgba(0, 0, 0, 1);
     color: white;
+    animation: darken 100ms ease 1;
 }
 
 .emoButton:hover, .emoButtonDark:hover {
@@ -149,5 +169,15 @@
     to {
         bottom: 50%;
         opacity: 1;
+    }
+}
+
+@keyframes darken {
+    from {
+        background-color: white;
+        color: black;
+    } to {
+        background-color: black;
+        color: white;
     }
 }

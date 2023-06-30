@@ -4,6 +4,7 @@ import asyncio
 import secret
 from song import Song
 from lyric_processing import parse_text_verse_nosubtitles, remove_subtitles
+from unidecode import unidecode # used to convert unicode to valid ascii
 
 humeClient = HumeStreamClient(secret.hume_key)
 
@@ -41,14 +42,12 @@ samples = [
 async def top_five_async(lyrics_array):
     config = LanguageConfig()
 
-    # print("bro1")
     async with humeClient.connect([config]) as socket:
         items = []
-
-        # print("Bro2")
+        
         for lyrics in lyrics_array:
-            # print("bro3")
-            result = await socket.send_text(lyrics)
+            print(unidecode(lyrics))
+            result = await socket.send_text(unidecode(lyrics))
             emotions = result["language"]["predictions"][0]["emotions"]
             emotions_sort = sorted(emotions, key=lambda x: -x['score'])
             emotions_sort = emotions_sort[0:5]
@@ -66,7 +65,7 @@ def top_five_stanza(lyrics):
 
     return asyncio.run(top_five_async(lyrics))
 
-# Returns a list of moods for the entrie song
+# Returns a list of moods for the entire song
 def top_five_song(lyrics):
     lyrics = [remove_subtitles(lyrics)]
     print("Lyrics successfully parsed (whole song)")

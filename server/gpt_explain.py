@@ -2,13 +2,15 @@ import secret
 from lyric_processing import parse_text_verse_nosubtitles
 from hume_outputs import stringify
 import openai
+from unidecode import unidecode # used to convert unicode to valid ascii
+
 
 openai.organization = secret.organization_id
 openai.api_key = secret.open_ai_key
 openai.Model.list()
 
 def gpt_explain(lyrics):
-    mood_strings = stringify(lyrics)
+    mood_strings = stringify(unidecode(lyrics))
     lyrics = parse_text_verse_nosubtitles(lyrics.strip("'"))
     print(f"lyrics successfully stringified ({len(mood_strings)} to parse)")
 
@@ -31,6 +33,7 @@ def gpt_explain(lyrics):
 
     print("Finished parsing all verses, returning explanation")
     return gpt_explanation
+
 
 def gpt_emotion(mood):
     response = openai.ChatCompletion.create(

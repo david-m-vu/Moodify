@@ -39,6 +39,7 @@ def gpt_explanation(song_id):
     gpt_explanation = gpt_explain(song.lyrics)
     return json.dumps({"items": gpt_explanation})
 
+
 @app.route('/gptrecsong/<mood>')
 def gpt_recsong(mood):
     gpt_rec = gpt_emotion(mood)
