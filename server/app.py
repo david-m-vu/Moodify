@@ -1,5 +1,5 @@
 from flask import Flask
-from gpt_explain import gpt_explain, gpt_emotion
+from gpt_explain import gpt_explain, gpt_emotion, gpt_explain_no_emotions
 from hume_outputs import top_five_song, top_five_stanza
 from song import search_song_single
 from song import Song, search_song
@@ -36,7 +36,8 @@ def top_five_emotions_stanza(song_id):
 @app.route('/gptexplain/<song_id>')
 def gpt_explanation(song_id):
     song = Song(song_id)
-    gpt_explanation = gpt_explain(song.lyrics)
+    # gpt_explanation = gpt_explain(song.lyrics)
+    gpt_explanation = gpt_explain_no_emotions(song.lyrics, song.title, song.artist)
     return json.dumps({"items": gpt_explanation})
 
 

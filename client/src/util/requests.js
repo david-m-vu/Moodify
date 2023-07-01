@@ -34,6 +34,12 @@ export const getExplanations = async (id) => {
   // return sampleExplanations;
 };
 
+const wait = (time) => {
+  return new Promise(resolve => {
+    setTimeout(resolve, time)
+  });
+}
+
 export const searchSongs = async (input) => {
   if (input !== "") {
     let response = await fetch(`${baseURL}/search/${input}`);
@@ -73,6 +79,5 @@ export const getEmotionScores = async (currentSong) => {
     responseJSON = await response.json();
   }
   return formatEmotionScores(responseJSON[0].emotions, responseJSON[0].scores);
-
   // return formatEmotionScores(tempEmotions[0].emotions, tempEmotions[0].scores);
 };  

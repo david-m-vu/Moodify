@@ -65,7 +65,6 @@ const Landing = (props) => {
 
     const handleButtonClick = () => {
         setDidChoose(true);
-        props.setIsLoading(true);
         props.getInitialSong(selectedEmotion)
     }
 

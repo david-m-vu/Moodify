@@ -22,27 +22,26 @@
 
 .top {
     grid-area: top;
-    /* display: flex;
-    justify-content: center;
-    align-items: center; */
+
     display: grid;
     align-items: center;
     justify-content: center;
     grid-template-areas: 
         "song title search";
     grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
     background-color: #84DCCF;
-    /* border-bottom: 1px solid black; */
+    border-bottom: 1px solid black;
 }
 
 .songInfo {
     grid-area: song;
     position: absolute;
-    margin: 10px;
+    margin: 20px;
     opacity: 0.9;
     animation: songInfoEntrance 2s ease;
     animation-fill-mode: backwards;
-
+    width: 30%
 }
 
 .title {
@@ -61,24 +60,36 @@
     grid-area: search;
     bottom: 0;
     display: flex;
-    align-items: flex-end;
     justify-content: flex-end;
+    align-items: center;
+    margin-right: 20px;
+}
+
+.searchIcon {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(0, -45%);
 }
 
 .inputs>input {
     border: none;
     outline: 0;
-    padding: 10px;
-    margin: 10px 10px 0 10px;
+    padding: 12px;
+    margin-left: 10px;
     background-color: rgba(255, 255, 255, 0.33);
     border-radius: 10px;
     height: 20%;
+    width: 100%;
 }
 
 .inputs {
     display: flex;
+    position: relative;
     justify-content: center;
     align-items: center;
+    width: clamp(20vw, 50%, 33vw);
+    margin-left: 10px;
 }
 
 .song-title {
@@ -87,7 +98,7 @@
 
 .results {
     position: absolute;
-    top: 110%;
+    top: 120%;
     left: 10px;
     background-color: white;
     padding: 10px;
@@ -118,7 +129,7 @@
     position: relative;
     flex: 1;
     background-color: #22181C;
-    margin: 10px 0 10px 10px;
+    margin: 10px 0 10px 20px;
     padding: 10px 20px 20px 20px;
     border-radius: 10px;
     box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);
@@ -198,6 +209,7 @@
     align-items: center;
     text-align: center;
     margin: 10px;
+    margin-right: 20px;
     padding: 20px;
     border-radius: 10px;
     background-color: #EF626C;
@@ -210,8 +222,8 @@
 }
 
 .emotionsList {
-    margin-top: 50%;
-    transform: translate(0, -50%);
+    /* margin-top: 25%; */
+    /* transform: translate(0, -50%); */
 }
 
 .emotionText {
@@ -294,6 +306,25 @@
     padding: 5px;
 }
 
+.loadingScreen {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.loader {
+    border: 16px solid rgba(0, 0, 0, 0.5);
+    border-top: 16px solid #84DCCF;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    animation: spin 1.5s linear infinite;
+}
+
 @keyframes songInfoEntrance {
     from {
         opacity: 0;
@@ -324,5 +355,14 @@
         transform: translate(0, 2000px);
     } 
     to {
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
     }
 }

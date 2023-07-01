@@ -69,7 +69,9 @@ const Main = (props) => {
 
         <div className="search">
           <div className="inputs">
-            <SearchIcon fontSize="large" />
+            <div className="searchIcon">
+              <SearchIcon fontSize="large" />
+            </div>  
             <input
               type="text"
               placeholder="Search for more songs"
@@ -142,7 +144,7 @@ const Main = (props) => {
         </div>
       )}
 
-      {props.currentSong && (
+      {(!props.isLoading && props.currentSong) && (
         <div className="emotions">
           <div className="emotionsList">
             {Object.entries(props.topEmotions).map(
@@ -164,6 +166,11 @@ const Main = (props) => {
           <RefreshIcon fontSize="large"/>
         </div>
       </div>
+      {props.isLoading && <div className="loadingScreen">
+        <div className="loader">
+
+        </div>
+      </div>}
     </div>
   );
 };

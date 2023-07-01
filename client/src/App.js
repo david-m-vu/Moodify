@@ -24,12 +24,13 @@ function App() {
 
   const selectSong = async (song) => {
     setCurrentSong(null);
+    setExplanations([]);
+    setTopEmotions([]);
+    
+    setIsLoading(true);
     let retrievedSong = await retrieveSong(song.id);
     setCurrentSong(retrievedSong);
 
-    // let explanationsPromise = getExplanations(retrievedSong.id);
-
-    // setLyrics(parseLyrics(songJson.lyrics));
     setVerses(getVerses(parseLyrics(retrievedSong.lyrics)));
     setTopEmotions(await getEmotionScores(retrievedSong));
     setExplanations(await getExplanations(retrievedSong.id));
@@ -55,8 +56,9 @@ function App() {
   };
 
   const getInitialSong = async (initialEmotion) => {
-      let recommendedSong = await gptRecSong(initialEmotion);
-      selectSong(recommendedSong);
+    setIsLoading(true);
+    let recommendedSong = await gptRecSong(initialEmotion);
+    selectSong(recommendedSong);
   };
 
   return (
@@ -66,8 +68,7 @@ function App() {
           <Route
             path="/"
             element={<Landing getInitialSong={getInitialSong}
-            isLoading={isLoading} 
-            setIsLoading={setIsLoading}/>}
+              isLoading={isLoading}/>}
           />
           <Route
             path="/main"
@@ -79,6 +80,7 @@ function App() {
                 verses={verses}
                 explanations={explanations}
                 topEmotions={topEmotions}
+                isLoading={isLoading}
               />
             }
           />
