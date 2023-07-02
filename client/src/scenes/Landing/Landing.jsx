@@ -64,8 +64,15 @@ const Landing = (props) => {
     }
 
     const handleButtonClick = () => {
+        if (selectedEmotion) {
+            setDidChoose(true);
+            props.getInitialSong(selectedEmotion)
+        }
+    }
+
+    const handleSkip = () => {
         setDidChoose(true);
-        props.getInitialSong(selectedEmotion)
+        goMain();
     }
 
     return (
@@ -84,6 +91,7 @@ const Landing = (props) => {
                     })}
                 </div>
                 <button className={getEmoButtonClassName()} onClick={handleButtonClick}>I'M {selectedEmotion}</button>
+                <p className="skip unselectable" onClick={handleSkip}>Skip</p>
             </div>
 
             {(didChoose) && <div className={getLoadingClassName()}>{waitMessage}</div>}

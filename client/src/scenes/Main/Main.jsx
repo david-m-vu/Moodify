@@ -104,8 +104,8 @@ const Main = (props) => {
         </div>
       </div>
 
-      {props.currentSong && (
-        <div className="mainSection">
+      {(!props.isLoading && props.currentSong) && (
+        <div className="mainSection box">
           <div className="lyrics">
             {props.verses.length !== 0 &&
               props.verses.map((verse, index) => {
@@ -145,7 +145,7 @@ const Main = (props) => {
       )}
 
       {(!props.isLoading && props.currentSong) && (
-        <div className="emotions">
+        <div className="emotions box">
           <div className="emotionsList">
             {Object.entries(props.topEmotions).map(
               ([emotion, score], index) => {
@@ -160,6 +160,14 @@ const Main = (props) => {
           </div>
         </div>
       )}
+
+      {(!props.isLoading && props.currentSong) && 
+        <div className="recommendations box">
+          <h2>RECOMMENDATIONS</h2>
+          <hr></hr>
+        </div>
+      }
+
       <div className="foot">
         <div className="moodifyMe" onClick={() => goLanding()}>
           <h2 className="moodifyMeText">Re-Moodify</h2>

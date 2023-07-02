@@ -2,6 +2,12 @@
     --base-font-size: 40;
 }
 
+.box {
+    border-radius: 10px;
+    box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);
+    opacity: 1;
+}
+
 .Main {
     position: relative;
     display: grid;
@@ -12,8 +18,9 @@
     grid-template-areas:
         "top top top"
         "exp exp emotions"
-        "play foot deez";
-    grid-template-rows: 130px 1fr 70px;
+        "exp exp recommendations"
+        "foot foot foot";
+    grid-template-rows: 130px 1fr 2fr 130px;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 10px;
 
@@ -41,7 +48,7 @@
     opacity: 0.9;
     animation: songInfoEntrance 2s ease;
     animation-fill-mode: backwards;
-    width: 30%
+    width: 30%;
 }
 
 .title {
@@ -131,9 +138,6 @@
     background-color: #22181C;
     margin: 10px 0 10px 20px;
     padding: 10px 20px 20px 20px;
-    border-radius: 10px;
-    box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);
-    opacity: 0.9;
     animation: songInfoEntrance 2s ease;
     animation-fill-mode: backwards;
     animation-delay: calc(1 * var(--stagger-delay));
@@ -207,15 +211,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     text-align: center;
     margin: 10px;
     margin-right: 20px;
     padding: 20px;
-    border-radius: 10px;
     background-color: #EF626C;
-    box-shadow: 2px 2px 7px 2px rgba(0, 0, 0, 0.3);
     color: #FAF9F9;
-    opacity: 0.9;
     animation: pop-up ease 2s;
     animation-fill-mode: backwards;
     animation-delay: calc(1 * var(--stagger-deylay));
@@ -277,6 +279,16 @@
     animation: emotion-up ease 2s;
     animation-fill-mode: backwards;
     animation-delay: calc(7 * var(--stagger-delay));
+}
+
+.recommendations {
+    grid-area: recommendations;
+    background-color: #87D68D;
+    margin: 10px;
+    margin-right: 20px;
+    padding: 20px;
+    text-align: center;
+    color: white;
 }
 
 .foot {

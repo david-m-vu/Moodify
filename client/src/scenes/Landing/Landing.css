@@ -101,7 +101,16 @@
     animation: darken 100ms ease 1;
 }
 
-.emoButton:hover, .emoButtonDark:hover {
+.emoButtonDark:hover {
+    cursor: pointer;
+}
+
+.skip {
+    color: #454545;
+    font-size: 0.8em;
+}
+
+.skip:hover {
     cursor: pointer;
 }
 
@@ -181,3 +190,16 @@
         color: white;
     }
 }
+
+*.unselectable {
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+ 
+    /*
+      Introduced in IE 10.
+      See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+    */
+    -ms-user-select: none;
+    user-select: none;
+ }
