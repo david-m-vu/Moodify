@@ -1,3 +1,4 @@
-server/venv/
-server/.env
-server/.cache
+/server/venv/
+/server/.env
+/server/.cache
+/server/__pychache__/
