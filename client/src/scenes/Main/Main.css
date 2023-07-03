@@ -11,9 +11,8 @@
 .Main {
     position: relative;
     display: grid;
-    min-height: 100%;
-    min-width: 100%;
-    max-height: 100vh;
+    height: 100%;
+    width: 100%;
     background-color: #F6E8EA;
     grid-template-areas:
         "top top top"
@@ -25,6 +24,7 @@
     gap: 10px;
 
     --stagger-delay: 100ms;
+    overflow: hidden;
 }
 
 .top {
@@ -234,6 +234,7 @@
     font-size: calc(var(--base-font-size) * 1px);
     opacity: 1;
     margin: 0;
+
 }
 
 .emotionText:nth-child(1) {
@@ -286,24 +287,27 @@
 .recommendations {
     grid-area: recommendations;
     background-color: #87D68D;
-    margin: 10px;
-    margin-right: 20px;
+    margin: 10px 20px 10px 10px;
     padding: 20px;
     text-align: center;
     color: white;
-    animation: appear-from-right ease 2s 1.5s 1;
+    animation: appear-from-right 2s ease 1.5s;
     animation-fill-mode: backwards;
 }
 
 .foot {
     grid-area: foot;
-    display: flex;
+    display: grid;
+    grid-template-areas: 
+        "space remoodify expToggle";
+    grid-template-columns: 1fr 1fr 1fr;
     justify-content: center;
     align-items: center;
     background: linear-gradient(to top, #312F2F, #F6E8EA);
 }
 
 .moodifyMe {
+    grid-area: remoodify;
     background-color: black;
     padding: 10px;
     margin-bottom: 15px;
@@ -313,6 +317,15 @@
     justify-content: center;
     align-items: center;
 }
+
+.expToggle {
+    grid-area: expToggle;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
 
 .moodifyMe:hover {
     cursor: pointer;
@@ -324,7 +337,7 @@
 }
 
 .loadingScreen {
-    position: fixed;
+    position: absolute;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -388,10 +401,9 @@
     from {
         opacity: 0;
         filter: hue-rotate(180deg);
-        transform: translate(200%, 0)
+        transform: translate(200%);
     }
     to {
         filter: hue-rotate(0deg);
-
     }
 }

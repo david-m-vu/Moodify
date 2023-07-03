@@ -1,5 +1,5 @@
 import "./Main.css";
-import Song from "../../components/Song/Song.jsx";
+// import Song from "../../components/Song/Song.jsx";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -30,8 +30,13 @@ const Main = (props) => {
     let searchResults = await searchSongs(input);
     if (searchResults) {
       setSearchResults(searchResults.slice(0, 5));
+
     }
   };
+
+  const handleToggleExplanation = () => {
+    props.setToggleExplanations((prev) => !prev);
+  }
 
   const handleChooseSong = (result) => {
     props.selectSong(result);
@@ -60,7 +65,13 @@ const Main = (props) => {
               artist={props.currentSong.artist}
               cover={props.currentSong.cover}
             /> */}
-            <iframe className="spotifySong" style={{"margin": 0, "padding": 0}}src={`https://open.spotify.com/embed/track/${props.currentSong.id}?utm_source=generator`} frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+            <iframe className="spotifySong" 
+            style={{ "margin": 0, "padding": 0 }} 
+            src={`https://open.spotify.com/embed/track/${props.currentSong.id}?utm_source=generator`} 
+            frameBorder="0" allowFullScreen="" 
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+            loading="lazy">
+            </iframe>
           </div>
         )}
 
@@ -72,7 +83,7 @@ const Main = (props) => {
           <div className="inputs">
             <div className="searchIcon">
               <SearchIcon fontSize="large" />
-            </div>  
+            </div>
             <input
               type="text"
               placeholder="Search for more songs"
@@ -162,7 +173,7 @@ const Main = (props) => {
         </div>
       )}
 
-      {(!props.isLoading && props.currentSong) && 
+      {(!props.isLoading && props.currentSong) &&
         <div className="recommendations box">
           <h2>RECOMMENDATIONS</h2>
           <hr></hr>
@@ -173,13 +184,16 @@ const Main = (props) => {
       <div className="foot">
         <div className="moodifyMe" onClick={() => goLanding()}>
           <h2 className="moodifyMeText">Re-Moodify</h2>
-          <RefreshIcon fontSize="large"/>
+          <RefreshIcon fontSize="large" />
+        </div>
+        <div className="expToggle">
+          <input type="checkbox" checked={props.toggleExplanations} onChange={handleToggleExplanation} />
+          <p>Explanations are: {props.toggleExplanations ? "On" : "Off"}</p>
         </div>
       </div>
 
       {props.isLoading && <div className="loadingScreen">
         <div className="loader">
-
         </div>
       </div>}
     </div>

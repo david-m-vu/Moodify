@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import Landing from "./scenes/Landing/Landing.jsx";
 import Main from "./scenes/Main/Main.jsx";
@@ -20,20 +20,20 @@ function App() {
   const [explanations, setExplanations] = useState([]);
   const [topEmotions, setTopEmotions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [toggleExplanations, setToggleExplanations] = useState(true)
 
   const selectSong = async (song) => {
     setCurrentSong(null);
     setExplanations([]);
     setTopEmotions([]);
-    
+
     setIsLoading(true);
     let retrievedSong = await retrieveSong(song.id);
     setCurrentSong(retrievedSong);
 
     setVerses(getVerses(parseLyrics(retrievedSong.lyrics)));
     setTopEmotions(await getEmotionScores(retrievedSong));
-    setExplanations(await getExplanations(retrievedSong.id));
+    setExplanations(await getExplanations(retrievedSong.id, toggleExplanations));
     setIsLoading(false);
   };
 
@@ -63,29 +63,29 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={<Landing getInitialSong={getInitialSong}
-              isLoading={isLoading}/>}
-          />
-          <Route
-            path="/main"
-            element={
-              <Main
-                selectSong={selectSong}
-                getExplanation={getExplanation}
-                currentSong={currentSong}
-                verses={verses}
-                explanations={explanations}
-                topEmotions={topEmotions}
-                isLoading={isLoading}
-              />
-            }
-          />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={<Landing getInitialSong={getInitialSong}
+            isLoading={isLoading} />}
+        />
+        <Route
+          path="/main"
+          element={
+            <Main
+              selectSong={selectSong}
+              getExplanation={getExplanation}
+              currentSong={currentSong}
+              verses={verses}
+              explanations={explanations}
+              topEmotions={topEmotions}
+              isLoading={isLoading}
+              toggleExplanations={toggleExplanations}
+              setToggleExplanations={setToggleExplanations}
+            />
+          }
+        />
+      </Routes>
     </div>
   );
 }
