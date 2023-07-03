@@ -55,11 +55,12 @@ const Main = (props) => {
       <div className="top">
         {props.currentSong && (
           <div className="songInfo">
-            <Song
+            {/* <Song
               title={props.currentSong.title}
               artist={props.currentSong.artist}
               cover={props.currentSong.cover}
-            />
+            /> */}
+            <iframe className="spotifySong" style={{"margin": 0, "padding": 0}}src={`https://open.spotify.com/embed/track/${props.currentSong.id}?utm_source=generator`} frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
           </div>
         )}
 
@@ -165,6 +166,7 @@ const Main = (props) => {
         <div className="recommendations box">
           <h2>RECOMMENDATIONS</h2>
           <hr></hr>
+          WIP
         </div>
       }
 
@@ -174,6 +176,7 @@ const Main = (props) => {
           <RefreshIcon fontSize="large"/>
         </div>
       </div>
+
       {props.isLoading && <div className="loadingScreen">
         <div className="loader">
 

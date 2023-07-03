@@ -25,13 +25,13 @@ const tempEmotions = [{
 }];
 
 export const getExplanations = async (id) => {
-  let response = await fetch(`${baseURL}/gptexplain/${id}`);
-  let responseJSON;
-  if (response.ok) {
-      responseJSON = await response.json();
-  }
-  return responseJSON.items;
-  // return sampleExplanations;
+  // let response = await fetch(`${baseURL}/gptexplain/${id}`);
+  // let responseJSON;
+  // if (response.ok) {
+  //     responseJSON = await response.json();
+  // }
+  // return responseJSON.items;
+  return sampleExplanations;
 };
 
 const wait = (time) => {

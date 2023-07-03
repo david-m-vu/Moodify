@@ -6,6 +6,7 @@
     justify-content: center;
     align-items: center;
     background-color: #84DCCF;
+    background: linear-gradient(to bottom, #FFCF56, #84DCCF);
     font-size: 24px;
     overflow: hidden;
 }
