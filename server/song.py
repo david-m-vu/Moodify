@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
 import os
-import re
 from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy as sp
 from lyricsgenius import Genius
