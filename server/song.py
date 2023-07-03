@@ -1,13 +1,16 @@
+from dotenv import load_dotenv
+import os
 import re
 from spotipy.oauth2 import SpotifyClientCredentials
-from secret import spotify_client_id, spotify_client_secret, genius_api_key
 import spotipy as sp
 from lyricsgenius import Genius
 
-spotifyClient = sp.Spotify(auth_manager=SpotifyClientCredentials(client_id=spotify_client_id, 
-                                                      client_secret=spotify_client_secret))
+load_dotenv()
 
-gs = Genius(genius_api_key)
+spotifyClient = sp.Spotify(auth_manager=SpotifyClientCredentials(client_id=os.environ.get("spotify_client_id"), 
+                                                      client_secret=os.environ.get("spotify_client_secret")))
+
+gs = Genius(os.environ.get("genius_api_key"))
 
 def search_song(query):
     song_list = spotifyClient.search(query, 10, type="track")['tracks']['items']

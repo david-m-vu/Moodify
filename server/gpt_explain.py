@@ -1,12 +1,14 @@
-import secret
+from dotenv import load_dotenv
+import os
 from lyric_processing import parse_text_verse_nosubtitles
 from hume_outputs import stringify
 import openai
 from unidecode import unidecode # used to convert unicode to valid ascii
 
+load_dotenv()
 
-openai.organization = secret.organization_id
-openai.api_key = secret.open_ai_key
+openai.organization = os.environ.get("organization_id")
+openai.api_key = os.environ.get("open_ai_key")
 openai.Model.list()
 
 def gpt_explain(lyrics):

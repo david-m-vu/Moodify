@@ -1,2 +1,2 @@
-server/secret.py
 server/venv/
+server/.env

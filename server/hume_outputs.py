@@ -1,12 +1,15 @@
 from hume import HumeStreamClient
 from hume.models.config import LanguageConfig
 import asyncio
-import secret
+from dotenv import load_dotenv
+import os
 from song import Song
 from lyric_processing import parse_text_verse_nosubtitles, remove_subtitles
 from unidecode import unidecode # used to convert unicode to valid ascii
 
-humeClient = HumeStreamClient(secret.hume_key)
+load_dotenv()
+
+humeClient = HumeStreamClient(os.environ.get("hume_key"))
 
 # DO THIS AT ENDPOINT REQUEST
 # song = Song("35iCSlFxyiawRBUOtQAkeT")
