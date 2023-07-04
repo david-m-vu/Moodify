@@ -55,6 +55,14 @@ const Main = (props) => {
     }
   };
 
+  const getInputsClassName = () => {
+    if (!props.currentSong && !props.isLoading) {
+      return "inputs-spotlight"
+    } else {
+      return "inputs"
+    }
+  }
+
   return (
     <div className="Main">
       <div className="top">
@@ -80,7 +88,7 @@ const Main = (props) => {
         </div>
 
         <div className="search">
-          <div className="inputs">
+          <div className={getInputsClassName()}>
             <div className="searchIcon">
               <SearchIcon fontSize="large" />
             </div>
@@ -115,6 +123,8 @@ const Main = (props) => {
           </div>
         </div>
       </div>
+
+      {(!props.currentSong && !props.isLoading) && <div className="dark-overlay"></div>}
 
       {(!props.isLoading && props.currentSong) && (
         <div className="mainSection box">
@@ -186,6 +196,7 @@ const Main = (props) => {
           <h2 className="moodifyMeText">Re-Moodify</h2>
           <RefreshIcon fontSize="large" />
         </div>
+
         <div className="expToggle">
           <input type="checkbox" checked={props.toggleExplanations} onChange={handleToggleExplanation} />
           <p>Explanations are: {props.toggleExplanations ? "On" : "Off"}</p>

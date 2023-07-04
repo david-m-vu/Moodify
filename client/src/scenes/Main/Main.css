@@ -79,6 +79,25 @@
     margin-right: 20px;
 }
 
+.inputs, .inputs-spotlight {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: clamp(20vw, 50%, 33vw);
+    margin-left: 10px;
+}
+
+.inputs-spotlight {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    width: clamp(20vw, 50%, 33vw);
+    margin-left: 10px;
+    z-index: 10;
+}
+
 .searchIcon {
     position: absolute;
     right: 0;
@@ -86,7 +105,7 @@
     transform: translate(0, -45%);
 }
 
-.inputs>input {
+.inputs > input, .inputs-spotlight > input {
     border: none;
     outline: 0;
     padding: 12px;
@@ -97,13 +116,13 @@
     width: 100%;
 }
 
-.inputs {
-    display: flex;
-    position: relative;
-    justify-content: center;
-    align-items: center;
-    width: clamp(20vw, 50%, 33vw);
-    margin-left: 10px;
+.inputs-spotlight > input {
+    color: white;
+    box-shadow: 0px 0px 30px 1px rgb(255, 255, 255);
+}
+
+.inputs-spotlight > input::placeholder {
+    color: rgba(255, 255, 255, 0.5)
 }
 
 .song-title {
@@ -324,8 +343,12 @@
     justify-content: center;
     align-items: center;
     margin-bottom: 10px;
+    z-index: 11;
 }
 
+.expToggle > input {
+    margin-right: 10px;
+}
 
 .moodifyMe:hover {
     cursor: pointer;
@@ -336,7 +359,7 @@
     padding: 5px;
 }
 
-.loadingScreen {
+.loadingScreen, .dark-overlay {
     position: absolute;
     display: flex;
     justify-content: center;
@@ -344,6 +367,14 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
+}
+
+.loadingScreen {
+    z-index: 12;
+}
+
+.dark-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
 }
 
 .loader {

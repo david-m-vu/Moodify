@@ -43,21 +43,19 @@ samples = [
 # Submit lyrics an array (multiple elements if analyze line by line)
 # Returns list of top 5 emotions
 async def top_five_async(lyrics_array):
-    config = LanguageConfig()
+    config = LanguageConfig(granularity="passage")
 
     async with humeClient.connect([config]) as socket:
         items = []
-        
+
         for lyrics in lyrics_array:
             # print(unidecode(lyrics)[:1800])
             # hume ai cant take too many characters
-            result = await socket.send_text(unidecode(lyrics)[:1800])
-            # print(result["language"]["predictions"][0])
-            # print(len(result["language"]["predictions"]))
+            result = await socket.send_text(unidecode(lyrics)[:3000])
+            print(len(result["language"]["predictions"])) # should be one if pass in whole song
             emotions = result["language"]["predictions"][0]["emotions"]
             emotions_sort = sorted(emotions, key=lambda x: -x['score'])
             emotions_sort = emotions_sort[0:5]
-            # print(emotions_sort)
             emotions_sort_list = [x['name'] for x in emotions_sort]
             scores = [x['score'] for x in emotions_sort]
             emoscore_dict = {"emotions": emotions_sort_list, "scores": scores}
