@@ -5,7 +5,7 @@ from routes import main
 
 def create_app():
     app = Flask(__name__) 
-    CORS(app, origins=["https://david-m-vu.github.io"])
+    CORS(app, origins=["https://david-m-vu.github.io", "http://localhost:3000"])
 
     app.register_blueprint(main)
 

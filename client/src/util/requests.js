@@ -21,10 +21,10 @@ const sampleExplanations = [
   "Explanations are off",
 ];
 
-const tempEmotions = [{
-  emotions: ["Lorem", "Ipsum", "Dolor", "Sit", "Amet"],
-  scores: [0.3333, 0.2732, 0.1619, 0.1232, 0.1121]
-}];
+// const tempEmotions = [{
+//   emotions: ["Lorem", "Ipsum", "Dolor", "Sit", "Amet"],
+//   scores: [0.3333, 0.2732, 0.1619, 0.1232, 0.1121]
+// }];
 
 export const getExplanations = async (id, explanations) => {
   if (explanations) {
@@ -61,6 +61,8 @@ export const searchSongs = async (input) => {
     } catch (err) {
       console.log(err);
     }
+  } else {
+    return [];
   }
 };
 

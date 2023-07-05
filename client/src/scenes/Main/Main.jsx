@@ -1,7 +1,7 @@
 import "./Main.css";
 // import Song from "../../components/Song/Song.jsx";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
@@ -16,6 +16,17 @@ const Main = (props) => {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    let findSongs = async () => {
+      let searchResults = await searchSongs(input);
+      
+      if (searchResults) {
+        setSearchResults(searchResults.slice(0, 5));
+      }
+    }
+    findSongs();
+  }, [input])
+
   const goLanding = () => {
     navigate("../");
   };
@@ -27,11 +38,6 @@ const Main = (props) => {
 
   const handleInputChange = async (event) => {
     setInput(event.target.value);
-    let searchResults = await searchSongs(input);
-    if (searchResults) {
-      setSearchResults(searchResults.slice(0, 5));
-
-    }
   };
 
   const handleToggleExplanation = () => {
@@ -74,6 +80,7 @@ const Main = (props) => {
               cover={props.currentSong.cover}
             /> */}
             <iframe className="spotifySong" 
+            title="spotify-song"
             style={{ "margin": 0, "padding": 0 }} 
             src={`https://open.spotify.com/embed/track/${props.currentSong.id}?utm_source=generator`} 
             frameBorder="0" allowFullScreen="" 
