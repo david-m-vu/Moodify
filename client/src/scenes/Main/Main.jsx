@@ -38,7 +38,6 @@ const Main = (props) => {
 
   const handleInputChange = async (event) => {
     setInput(event.target.value);
-    console.log("change");
   };
 
   const handleToggleExplanation = () => {
