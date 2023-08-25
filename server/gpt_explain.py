@@ -7,7 +7,7 @@ from unidecode import unidecode # used to convert unicode to valid ascii
 
 load_dotenv()
 
-openai.organization = os.environ.get("organization_id")
+# openai.organization = os.environ.get("organization_id")
 openai.api_key = os.environ.get("open_ai_key")
 openai.Model.list()
 
